@@ -2,6 +2,8 @@
 const express = require('express');
 const request = require('request');
 const morgan = require('morgan');
+const bodyparser = require('body-parser');
+
 const {createProxyMiddleware} = require("http-proxy-middleware");
 
 require('dotenv').config();
@@ -20,7 +22,8 @@ const app = express();
 //         res.sendStatus(403);
 //     }
 // });
-app.use(morgan("combined"));
+app.use(bodyparser.json());
+app.use(morgan("dev"));
 
 // Proxy endpoints
 app.use('/weather', createProxyMiddleware({
@@ -34,6 +37,12 @@ app.use('/weather', createProxyMiddleware({
 /* setup the public files to be available (e.g. content, css, client side js files) */
 app.use(express.static("public"));
 
+
+/* server rules */
+// app.post("/weather",(req,res) => {
+//    console.log(req.url);
+//    console.log(req.body);
+// });
 
 const port = process.env.PORT || 3000;
 

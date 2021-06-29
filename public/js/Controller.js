@@ -37,7 +37,9 @@ var Controller = /*#__PURE__*/function () {
                   'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                  parameters: parameters
+                  q: parameters.q,
+                  appid: parameters.appid,
+                  units: parameters.units
                 })
               };
               _context.next = 3;

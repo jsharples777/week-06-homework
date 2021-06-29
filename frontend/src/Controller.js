@@ -26,7 +26,7 @@ export default class Controller {
         const postParameters = {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({parameters})
+            body: JSON.stringify({q: parameters.q, appid: parameters.appid, units:parameters.units})
         };
 
         const response = await fetch(url, postParameters);
