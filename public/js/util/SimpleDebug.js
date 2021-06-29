@@ -1,6 +1,6 @@
 export var SimpleDebug = /*#__PURE__*/function () {
   function SimpleDebug() {
-    this.debugOn = false;
+    this.debugOn = true;
     this.debugDepth = 100;
   }
 

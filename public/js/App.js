@@ -5,17 +5,51 @@ function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.crea
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 import Controller from "./Controller.js";
+import logger from "./util/SimpleDebug.js";
 
 function PreviousSearches(props) {
+  var controller = props.controller;
+  logger.log(controller);
+  /* find any previous city name searches */
+
+  var previousCityNames = controller.getPreviousCitySearches();
+  logger.log("Previous City Names is " + previousCityNames, 1);
+  var cityNameRows = previousCityNames.map(function (name) {
+    return /*#__PURE__*/React.createElement("li", {
+      cityName: name,
+      className: "border rounded bg-dark text-white",
+      onClick: controller.handleWeatherSearchForPreviousSearch
+    }, name);
+  });
   return /*#__PURE__*/React.createElement("ul", null);
 }
 
 function TodaysDetails(props) {
-  return /*#__PURE__*/React.createElement("ul", null);
+  var details = null;
+
+  if (details !== null) {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "col-12 w-100 border border-dark rounded h-50 p-2 mb-3"
+    });
+  } else {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "col-12 w-100 h-50"
+    });
+  }
 }
 
 function Forecast(props) {
-  return /*#__PURE__*/React.createElement("ul", null);
+  var forecast = null;
+
+  if (forecast !== null) {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "col-12 w-100 h-50 pt-2 bg-dark text-white text-left"
+    });
+  } else {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "col-12 w-100 h-50"
+    });
+  }
 }
 
 var App = /*#__PURE__*/function (_React$Component) {
@@ -27,7 +61,7 @@ var App = /*#__PURE__*/function (_React$Component) {
     _this = _React$Component.call(this) || this;
     _this.controller = new Controller(_assertThisInitialized(_this), window.localStorage);
     _this.state = {
-      currentSearchResults: {}
+      currentSearchResults: []
     };
     return _this;
   }
@@ -51,8 +85,8 @@ var App = /*#__PURE__*/function (_React$Component) {
     }, /*#__PURE__*/React.createElement("form", {
       id: "searchForm",
       className: "was-validated",
-      noValidate: "",
-      onSubmit: this.controller.getPreviousCitySearches
+      noValidate: false,
+      onSubmit: this.controller.handleWeatherSearch
     }, /*#__PURE__*/React.createElement("div", {
       className: "form-group"
     }, /*#__PURE__*/React.createElement("h3", null, "Search for a City:"), /*#__PURE__*/React.createElement("input", {
@@ -73,18 +107,14 @@ var App = /*#__PURE__*/function (_React$Component) {
     }, /*#__PURE__*/React.createElement("hr", null)), /*#__PURE__*/React.createElement("div", {
       className: "col-12"
     }, /*#__PURE__*/React.createElement(PreviousSearches, {
-      controller: this.controller.getPreviousCitySearches
+      controller: this.controller
     }))))), /*#__PURE__*/React.createElement("div", {
       className: "col-lg-9 col-md-8 col-sm-12"
     }, /*#__PURE__*/React.createElement("div", {
       className: "container-fluid"
     }, /*#__PURE__*/React.createElement("div", {
       className: "row"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "col-12 w-100 border border-dark rounded h-50 p-2 mb-3"
-    }, /*#__PURE__*/React.createElement(TodaysDetails, null)), /*#__PURE__*/React.createElement("div", {
-      className: "col-12 w-100 h-50 pt-2 bg-dark text-white text-left"
-    }, /*#__PURE__*/React.createElement(Forecast, null)))))));
+    }, /*#__PURE__*/React.createElement(TodaysDetails, null), /*#__PURE__*/React.createElement(Forecast, null))))));
   };
 
   return App;

@@ -1,24 +1,63 @@
 import Controller from "./Controller.js";
+import logger from "./util/SimpleDebug.js";
 
 function PreviousSearches(props) {
+
+    let controller = props.controller;
+    logger.log(controller);
+    /* find any previous city name searches */
+    let previousCityNames = controller.getPreviousCitySearches();
+    logger.log("Previous City Names is " + previousCityNames,1);
+
+    const cityNameRows = previousCityNames.map(name =>
+        <li cityName={name} className={"border rounded bg-dark text-white"} onClick={controller.handleWeatherSearchForPreviousSearch}>{name}</li>
+    );
+
     return (
-        <ul></ul>
+        <ul>
+        </ul>
 
     );
 }
 
 function TodaysDetails(props) {
-    return (
-        <ul></ul>
 
-    );
+    let details = null;
+
+    if (details !== null) {
+        return (
+            <div className={"col-12 w-100 border border-dark rounded h-50 p-2 mb-3"}>
+            </div>
+
+        );
+    }
+    else {
+        return (
+            <div className={"col-12 w-100 h-50"}>
+            </div>
+
+        );
+    }
+
 }
 
 function Forecast(props) {
-    return (
-        <ul></ul>
 
-    );
+    let forecast = null;
+
+    if (forecast !== null) {
+        return (
+            <div className={"col-12 w-100 h-50 pt-2 bg-dark text-white text-left"}>
+            </div>
+
+        );
+    }
+    else {
+        return (
+            <div className={"col-12 w-100 h-50"}>
+            </div>
+        )
+    }
 }
 
 class App extends React.Component {
@@ -27,7 +66,7 @@ class App extends React.Component {
     constructor() {
         super();
         this.controller = new Controller(this,window.localStorage);
-        this.state = {currentSearchResults: {}}
+        this.state = {currentSearchResults: []};
     }
 
     render() {
@@ -38,7 +77,7 @@ class App extends React.Component {
                         <div className={"container-fluid w-100"}>
                             <div className="row">
                                 <div className={"col-12"}>
-                                    <form id={"searchForm"} className={"was-validated"} noValidate={""} onSubmit={this.controller.getPreviousCitySearches}>
+                                    <form id={"searchForm"} className={"was-validated"} noValidate={false} onSubmit={this.controller.handleWeatherSearch}>
                                         <div className={"form-group"}>
                                             <h3>Search for a City:</h3>
                                             <input type={"text"} className={"form-control is-invalid"} id={"cityName"} placeholder={"Melbourne"}></input>
@@ -56,7 +95,7 @@ class App extends React.Component {
                                     <hr></hr>
                                 </div>
                                 <div className={"col-12"}>
-                                    <PreviousSearches controller={this.controller.getPreviousCitySearches}/>
+                                    <PreviousSearches controller={this.controller}/>
                                 </div>
                             </div>
                         </div>
@@ -65,12 +104,12 @@ class App extends React.Component {
                     <div className={"col-lg-9 col-md-8 col-sm-12"}>
                         <div className={"container-fluid"}>
                             <div className={"row"}>
-                                <div className={"col-12 w-100 border border-dark rounded h-50 p-2 mb-3"}>
+
                                     <TodaysDetails/>
-                                </div>
-                                <div className={"col-12 w-100 h-50 pt-2 bg-dark text-white text-left"}>
+
+
                                     <Forecast/>
-                                </div>
+
                             </div>
 
                         </div>
