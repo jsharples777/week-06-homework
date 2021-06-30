@@ -8,99 +8,87 @@ var Controller = /*#__PURE__*/function () {
   function Controller(applicationView, clientSideStorage) {
     this.applicationView = applicationView;
     this.clientSideStorage = clientSideStorage;
-    this.apiKey = "1781f031cee8b3399deb7f12ea560141";
-    this.queryURL = "/weather"; // this.queryURL = "https://api.openweathermap.org/data/2.5/weather";
+    this.currentQueryURL = "/current";
+    this.forecastQueryURL = "/forecast"; // this.queryURL = "https://api.openweathermap.org/data/2.5/weather";
 
     this.savedSearchesKey = "savedSearchesKey";
     this.previousSearches = [];
     this.getPreviousCitySearches = this.getPreviousCitySearches.bind(this);
     this.handleWeatherSearch = this.handleWeatherSearch.bind(this);
     this.handleWeatherSearchForPreviousSearch = this.handleWeatherSearchForPreviousSearch.bind(this);
+    this.__callbackWeatherSearch = this.__callbackWeatherSearch.bind(this);
   }
-  /* private */
-
 
   var _proto = Controller.prototype;
 
-  _proto.__fetchQLJSON =
-  /*#__PURE__*/
-  function () {
-    var _fetchQLJSON = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(url, parameters) {
-      var postParameters, response;
+  _proto.__callbackForecastSearch = function __callbackForecastSearch(data) {
+    logger.log(data, 20);
+    logger.log(data.weather, 100);
+    this.applicationView.setState({
+      forecast: data
+    });
+  }
+  /* private */
+  ;
+
+  _proto.__callbackWeatherSearch = function __callbackWeatherSearch(data) {
+    logger.log(data, 20);
+    logger.log(data.weather, 100);
+    this.applicationView.setState({
+      current: data
+    });
+    /* now make a call for the forecast */
+  }
+  /* private */
+  ;
+
+  _proto.__fetchQLJSON = function __fetchQLJSON(url, parameters, callback) {
+    var postParameters = {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        parameters: parameters
+      })
+    };
+    fetch(url, postParameters).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      callback(JSON.parse(data));
+    });
+  };
+
+  _proto.__getCurrentWeatherDataForCity = /*#__PURE__*/function () {
+    var _getCurrentWeatherDataForCity = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(cityName) {
+      var fetchParameters;
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
-            case 0:
-              postParameters = {
-                method: "POST",
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  q: parameters.q,
-                  appid: parameters.appid,
-                  units: parameters.units
-                })
-              };
-              _context.next = 3;
-              return fetch(url, postParameters);
-
-            case 3:
-              response = _context.sent;
-              return _context.abrupt("return", response.json());
-
-            case 5:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-
-    function __fetchQLJSON(_x, _x2) {
-      return _fetchQLJSON.apply(this, arguments);
-    }
-
-    return __fetchQLJSON;
-  }();
-
-  _proto.__getWeatherDataForCity = /*#__PURE__*/function () {
-    var _getWeatherDataForCity = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(cityName) {
-      var fetchParameters, result;
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
             case 0:
               logger.log("Loading weather for " + cityName, 2);
               /* construct the request */
 
               fetchParameters = {
-                q: cityName,
-                appid: this.apiKey,
-                units: "metric"
+                q: cityName
               };
-              _context2.next = 4;
-              return this.__fetchQLJSON(this.queryURL, fetchParameters);
+              logger.log("Fetching weather for " + cityName, 2);
+
+              this.__fetchQLJSON(this.currentQueryURL, fetchParameters, this.__callbackWeatherSearch);
 
             case 4:
-              result = _context2.sent;
-              this.applicationView.setState({
-                currentSearchResults: result.data
-              });
-
-            case 6:
             case "end":
-              return _context2.stop();
+              return _context.stop();
           }
         }
-      }, _callee2, this);
+      }, _callee, this);
     }));
 
-    function __getWeatherDataForCity(_x3) {
-      return _getWeatherDataForCity.apply(this, arguments);
+    function __getCurrentWeatherDataForCity(_x) {
+      return _getCurrentWeatherDataForCity.apply(this, arguments);
     }
 
-    return __getWeatherDataForCity;
+    return __getCurrentWeatherDataForCity;
   }()
   /* private */
   ;
@@ -143,14 +131,14 @@ var Controller = /*#__PURE__*/function () {
     var cityName = document.getElementById("cityName").value;
     logger.log("City Name is " + cityName, 2);
 
-    this.__getWeatherDataForCity(cityName).then(logger.log("Loading weather data async", 3));
+    this.__getCurrentWeatherDataForCity(cityName).then(logger.log("Loading weather data async", 3));
   };
 
   _proto.handleWeatherSearchForPreviousSearch = function handleWeatherSearchForPreviousSearch(event) {
     event.preventDefault();
     var cityName = event.target.getAttribute("cityName");
 
-    this.__getWeatherDataForCity(cityName).then(logger.log("Loading weather data async", 3));
+    this.__getCurrentWeatherDataForCity(cityName).then(logger.log("Loading weather data async", 3));
   };
 
   return Controller;

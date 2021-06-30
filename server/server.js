@@ -26,13 +26,13 @@ app.use(bodyparser.json());
 app.use(morgan("dev"));
 
 // Proxy endpoints
-app.use('/weather', createProxyMiddleware({
-    target: process.env.WEATHER_URL,
-    changeOrigin: true,
-    pathRewrite: {
-        [`^/weather`]: '',
-    },
-}));
+// app.use('/weather', createProxyMiddleware({
+//     target: process.env.WEATHER_URL,
+//     changeOrigin: true,
+//     pathRewrite: {
+//         [`^/weather`]: '',
+//     },
+// }));
 
 /* setup the public files to be available (e.g. content, css, client side js files) */
 app.use(express.static("public"));
@@ -43,6 +43,33 @@ app.use(express.static("public"));
 //    console.log(req.url);
 //    console.log(req.body);
 // });
+
+
+app.post("/current",(req,res) => {
+    console.log("url: " + req.url);
+    console.log("body: " + req.body);
+    let newURL = process.env.CURRENT_WEATHER_URL + "?q=" + req.body.parameters.q + "&appid=" + process.env.API_KEY + "&units=metric";
+    console.log("new URL is: " + newURL);
+    request(newURL, function (error, response, body) {
+        console.error('error:', error); // Print the error if one occurred
+        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        console.log('body:', body);
+        res.json(body);
+    });
+});
+
+app.post("/forecast",(req,res) => {
+    console.log("url: " + req.url);
+    console.log("body: " + req.body);
+    let newURL = process.env.CURRENT_WEATHER_URL + "?lat=" + req.body.parameters.lat + "&lon=" + req.body.parameters.lon + "&appid=" + process.env.API_KEY + "&units=metric&exclude='current,minutely,hourly,alerts'";
+    console.log("new URL is: " + newURL);
+    request(newURL, function (error, response, body) {
+        console.error('error:', error); // Print the error if one occurred
+        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        console.log('body:', body);
+        res.json(body);
+    });
+});
 
 const port = process.env.PORT || 3000;
 

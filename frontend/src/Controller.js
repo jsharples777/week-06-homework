@@ -7,8 +7,8 @@ export default class Controller {
     constructor(applicationView, clientSideStorage) {
         this.applicationView = applicationView;
         this.clientSideStorage = clientSideStorage;
-        this.apiKey = "1781f031cee8b3399deb7f12ea560141";
-        this.queryURL = "/weather";
+        this.currentQueryURL = "/current";
+        this.forecastQueryURL = "/forecast";
         // this.queryURL = "https://api.openweathermap.org/data/2.5/weather";
         this.savedSearchesKey = "savedSearchesKey";
         this.previousSearches = [];
@@ -18,32 +18,54 @@ export default class Controller {
         this.handleWeatherSearch = this.handleWeatherSearch.bind(this);
         this.handleWeatherSearchForPreviousSearch = this.handleWeatherSearchForPreviousSearch.bind(this);
 
+        this.__callbackWeatherSearch = this.__callbackWeatherSearch.bind(this);
+
 
     }
 
+    __callbackForecastSearch(data) {
+        logger.log(data, 20);
+        logger.log(data.weather, 100);
+        this.applicationView.setState({forecast: data});
+    }
 
-    /* private */ async __fetchQLJSON(url, parameters) {
+    /* private */ __callbackWeatherSearch(data) {
+        logger.log(data,20);
+        logger.log(data.weather,100);
+        this.applicationView.setState({current: data});
+
+        /* now make a call for the forecast */
+
+
+    }
+
+    /* private */ __fetchQLJSON(url, parameters, callback) {
         const postParameters = {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({q: parameters.q, appid: parameters.appid, units:parameters.units})
+            body: JSON.stringify({parameters})
         };
 
-        const response = await fetch(url, postParameters);
-        return response.json();
+
+        fetch(url, postParameters)
+            .then(response => response.json())
+            .then(data => {
+                callback(JSON.parse(data));
+            });
+
     }
 
-    async __getWeatherDataForCity(cityName) {
+    async __getCurrentWeatherDataForCity(cityName) {
         logger.log(`Loading weather for ${cityName}`, 2);
         /* construct the request */
         let fetchParameters = {
-            q: cityName,
-            appid: this.apiKey,
-            units: "metric",
+            q: cityName
         };
 
-        const result = await this.__fetchQLJSON(this.queryURL,fetchParameters);
-        this.applicationView.setState({currentSearchResults: result.data});
+
+        logger.log(`Fetching weather for ${cityName}`, 2);
+        this.__fetchQLJSON(this.currentQueryURL,fetchParameters,this.__callbackWeatherSearch);
+
     }
 
     /* private */ __savePreviousSearches() {
@@ -83,7 +105,7 @@ export default class Controller {
         logger.log("Handling city name search for weather ",2);
         let cityName = document.getElementById("cityName").value;
         logger.log("City Name is " + cityName,2);
-        this.__getWeatherDataForCity(cityName).then(
+        this.__getCurrentWeatherDataForCity(cityName).then(
             logger.log("Loading weather data async",3)
         );
 
@@ -92,7 +114,7 @@ export default class Controller {
     handleWeatherSearchForPreviousSearch(event) {
         event.preventDefault();
         let cityName = event.target.getAttribute("cityName");
-        this.__getWeatherDataForCity(cityName).then(
+        this.__getCurrentWeatherDataForCity(cityName).then(
             logger.log("Loading weather data async",3)
         );
     }

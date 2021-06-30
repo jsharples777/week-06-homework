@@ -61,7 +61,8 @@ var App = /*#__PURE__*/function (_React$Component) {
     _this = _React$Component.call(this) || this;
     _this.controller = new Controller(_assertThisInitialized(_this), window.localStorage);
     _this.state = {
-      currentSearchResults: []
+      current: {},
+      forecast: []
     };
     return _this;
   }
