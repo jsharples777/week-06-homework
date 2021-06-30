@@ -17,27 +17,68 @@ var Controller = /*#__PURE__*/function () {
     this.handleWeatherSearch = this.handleWeatherSearch.bind(this);
     this.handleWeatherSearchForPreviousSearch = this.handleWeatherSearchForPreviousSearch.bind(this);
     this.__callbackWeatherSearch = this.__callbackWeatherSearch.bind(this);
+    this.__callbackForecastSearch = this.__callbackForecastSearch.bind(this);
   }
 
   var _proto = Controller.prototype;
 
+  _proto.__convertForecastDataIntoDisplayFormat = function __convertForecastDataIntoDisplayFormat(data) {
+    var viewData = [];
+    logger.log("Converting Forecast Data for display", 10);
+    logger.log(data);
+
+    for (var index = 0; index < data.daily.length; index++) {
+      var viewDataItem = {
+        temp: data.daily[index].temp.max + " C",
+        humidity: data.daily[index].humidity + "%",
+        wind: data.daily[index].wind_speed + " m/s",
+        uv: data.daily[index].uvi,
+        icon: data.daily[index].weather[0].icon
+      };
+      logger.log(viewDataItem);
+      viewData.push(viewDataItem);
+    }
+
+    return viewData;
+  };
+
   _proto.__callbackForecastSearch = function __callbackForecastSearch(data) {
     logger.log(data, 20);
-    logger.log(data.weather, 100);
     this.applicationView.setState({
-      forecast: data
+      forecast: this.__convertForecastDataIntoDisplayFormat(data)
     });
+  }
+  /* take the open weather JSON reply and take out just the things we want for the view */
+  ;
+
+  _proto.__convertWeatherDataIntoDisplayFormat = function __convertWeatherDataIntoDisplayFormat(data) {
+    var viewData = {
+      name: data.name,
+      temp: data.main.temp + " C",
+      humidity: data.main.humidity + "%",
+      wind: data.wind.speed + "m/s"
+    };
+    logger.log(viewData, 100);
+    return viewData;
   }
   /* private */
   ;
 
   _proto.__callbackWeatherSearch = function __callbackWeatherSearch(data) {
     logger.log(data, 20);
-    logger.log(data.weather, 100);
-    this.applicationView.setState({
-      current: data
-    });
+    logger.log(data.weather, 100); //this.applicationView.setState({current: this.__convertWeatherDataIntoDisplayFormat(data)});
+
     /* now make a call for the forecast */
+
+    /* construct the request */
+
+    var fetchParameters = {
+      lat: data.coord.lat,
+      lon: data.coord.lon
+    };
+    logger.log("Fetching forecast for " + data.name, 2);
+
+    this.__fetchQLJSON(this.forecastQueryURL, fetchParameters, this.__callbackForecastSearch);
   }
   /* private */
   ;

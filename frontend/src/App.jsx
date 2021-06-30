@@ -66,7 +66,7 @@ class App extends React.Component {
     constructor() {
         super();
         this.controller = new Controller(this,window.localStorage);
-        this.state = {current: {}, forecast: []};
+        this.state = {weather: []};
     }
 
     render() {

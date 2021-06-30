@@ -4,6 +4,7 @@ const request = require('request');
 const morgan = require('morgan');
 const bodyparser = require('body-parser');
 
+
 const {createProxyMiddleware} = require("http-proxy-middleware");
 
 require('dotenv').config();
@@ -24,6 +25,11 @@ const app = express();
 // });
 app.use(bodyparser.json());
 app.use(morgan("dev"));
+app.use((request,response,next) => {
+    console.log(`Received request for ${request.url} with/without body`);
+    console.log(request.body);
+    next();
+});
 
 // Proxy endpoints
 // app.use('/weather', createProxyMiddleware({
@@ -41,6 +47,7 @@ app.use(express.static("public"));
 /* server rules */
 // app.post("/weather",(req,res) => {
 //    console.log(req.url);
+
 //    console.log(req.body);
 // });
 
