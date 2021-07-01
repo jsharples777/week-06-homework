@@ -183,6 +183,9 @@ class App extends React.Component {
         super();
         this.controller = new Controller(this, window.localStorage);
         this.state = {weather: []};
+        logger.setOn();
+        logger.setLevel(1000);
+
     }
 
     render() {
