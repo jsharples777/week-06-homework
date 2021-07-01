@@ -98,8 +98,8 @@ function ForecastItem(props) {
     if (details !== null) {
         logger.log("Rendering Forecast item Details", 3);
         return (
-            <div className={"col-lg-2 col-md-4 col-sm-12 w-100 h-50 p-1 m-1 bg-dark text-white h-100"}>
-                <div className={"container-fluid "}>
+            <div className={"col-lg-2 col-md-4 col-sm-12 w-100 p-1 m-1 text-white"}>
+                <div className={"container-fluid bg-dark"}>
                     <div className={"row"}>
                         <div className={"col-12"}>
                             <span style={{fontSize: "14pt"}}
@@ -161,7 +161,7 @@ function Forecast(props) {
                     <div className={"row"}>
                         <span style={{fontSize: "16pt"}}>5-day Forecast:</span>
                     </div>
-                    <div className={"row justify-content-between"}>
+                    <div className={"row row-eq-height justify-content-between"}>
                         {forecastItems}
                     </div>
                 </div>
@@ -228,12 +228,12 @@ class App extends React.Component {
 
                                 <TodaysDetails weather={this.state.weather}/>
                                 <Forecast weather={this.state.weather}/>
+                                <div className={"h-25"}>
+
+                                </div>
 
                             </div>
-
                         </div>
-
-
                     </div>
                 </div>
             </div>

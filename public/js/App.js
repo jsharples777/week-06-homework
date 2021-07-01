@@ -103,9 +103,9 @@ function ForecastItem(props) {
   if (details !== null) {
     logger.log("Rendering Forecast item Details", 3);
     return /*#__PURE__*/React.createElement("div", {
-      className: "col-lg-2 col-md-4 col-sm-12 w-100 h-50 p-1 m-1 bg-dark text-white h-100"
+      className: "col-lg-2 col-md-4 col-sm-12 w-100 p-1 m-1 text-white"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "container-fluid "
+      className: "container-fluid bg-dark"
     }, /*#__PURE__*/React.createElement("div", {
       className: "row"
     }, /*#__PURE__*/React.createElement("div", {
@@ -173,7 +173,7 @@ function Forecast(props) {
         fontSize: "16pt"
       }
     }, "5-day Forecast:")), /*#__PURE__*/React.createElement("div", {
-      className: "row justify-content-between"
+      className: "row row-eq-height justify-content-between"
     }, forecastItems)));
   } else {
     return /*#__PURE__*/React.createElement("div", {
@@ -250,6 +250,8 @@ var App = /*#__PURE__*/function (_React$Component) {
       weather: this.state.weather
     }), /*#__PURE__*/React.createElement(Forecast, {
       weather: this.state.weather
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "h-25"
     }))))));
   };
 

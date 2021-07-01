@@ -33,7 +33,7 @@ var Controller = /*#__PURE__*/function () {
     logger.log(data, 10);
     var viewDataItem = {
       name: cityName,
-      temp: data.current.temp + " C",
+      temp: data.current.temp + " ºC",
       humidity: data.current.humidity + "%",
       wind: data.current.wind_speed + " m/s",
       uv: data.current.uvi,
@@ -44,7 +44,7 @@ var Controller = /*#__PURE__*/function () {
 
     for (var index = 1; index < data.daily.length; index++) {
       var _viewDataItem = {
-        temp: data.daily[index].temp.max + " C",
+        temp: data.daily[index].temp.max + " ºC",
         humidity: data.daily[index].humidity + "%",
         wind: data.daily[index].wind_speed + " m/s",
         uv: data.daily[index].uvi,
