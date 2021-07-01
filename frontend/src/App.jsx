@@ -12,13 +12,13 @@ function PreviousSearches(props) {
     let cityNameRows = "";
     if (previousCityNames != null) {
         cityNameRows = previousCityNames.map((name,index) =>
-            <li key={index} cityName={name} className={"border rounded bg-secondary text-white w-100 p-1"}
+            <li key={index} cityname={name} className={"border rounded bg-secondary text-white w-100 p-1"}
                 onClick={controller.handleWeatherSearchForPreviousSearch}>{name}</li>
         );
     }
 
     return (
-        <ul className={"m-0 p-0"}>
+        <ul id="previousSearches" className={"m-0 pl-0 pb-1"}>
             {cityNameRows}
         </ul>
 
@@ -98,7 +98,7 @@ function ForecastItem(props) {
     if (details !== null) {
         logger.log("Rendering Forecast item Details", 3);
         return (
-            <div className={"col-lg-2 col-md-4 col-sm-1 w-100 h-50 p-1 m-1 bg-dark text-white"}>
+            <div className={"col-lg-2 col-md-4 col-sm-12 w-100 h-50 p-1 m-1 bg-dark text-white"}>
                 <div className={"container-fluid "}>
                     <div className={"row"}>
                         <div className={"col-12"}>
@@ -152,7 +152,7 @@ function Forecast(props) {
 
 
         const forecastItems = forecastDetails.map((item, day) =>
-            <ForecastItem day={day+1} item={item}/>
+            <ForecastItem key={day} day={day+1} item={item}/>
         );
 
         return (
@@ -200,7 +200,7 @@ class App extends React.Component {
                                           onSubmit={this.controller.handleWeatherSearch}>
                                         <div className={"form-group"}>
                                             <h3>Search for a City:</h3>
-                                            <input type={"text"} className={"form-control"} id={"cityName"}
+                                            <input type={"text"} className={"form-control"} id={"cityname"}
                                                     required></input>
                                             <div className={"invalid-feedback"}>Please provide a City name</div>
                                         </div>

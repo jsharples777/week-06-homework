@@ -178,7 +178,7 @@ export default class Controller {
     handleWeatherSearch(event) {
         event.preventDefault();
         logger.log("Handling city name search for weather ",2);
-        let cityName = document.getElementById("cityName").value.trim();
+        let cityName = document.getElementById("cityname").value.trim();
         if (cityName.length > 0) {
             logger.log("City Name is " + cityName, 2);
             this.__getCurrentWeatherDataForCity(cityName).then(
@@ -191,7 +191,7 @@ export default class Controller {
     handleWeatherSearchForPreviousSearch(event) {
         event.preventDefault();
         logger.log("Handling city name search from previous searches ",2);
-        let cityName = event.target.getAttribute("cityName");
+        let cityName = event.target.getAttribute("cityname");
         this.__getCurrentWeatherDataForCity(cityName).then(
             logger.log("Loading weather data async",3)
         );

@@ -210,7 +210,7 @@ var Controller = /*#__PURE__*/function () {
   _proto.handleWeatherSearch = function handleWeatherSearch(event) {
     event.preventDefault();
     logger.log("Handling city name search for weather ", 2);
-    var cityName = document.getElementById("cityName").value.trim();
+    var cityName = document.getElementById("cityname").value.trim();
 
     if (cityName.length > 0) {
       logger.log("City Name is " + cityName, 2);
@@ -222,7 +222,7 @@ var Controller = /*#__PURE__*/function () {
   _proto.handleWeatherSearchForPreviousSearch = function handleWeatherSearchForPreviousSearch(event) {
     event.preventDefault();
     logger.log("Handling city name search from previous searches ", 2);
-    var cityName = event.target.getAttribute("cityName");
+    var cityName = event.target.getAttribute("cityname");
 
     this.__getCurrentWeatherDataForCity(cityName).then(logger.log("Loading weather data async", 3));
   };

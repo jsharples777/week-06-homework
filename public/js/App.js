@@ -20,7 +20,7 @@ function PreviousSearches(props) {
     cityNameRows = previousCityNames.map(function (name, index) {
       return /*#__PURE__*/React.createElement("li", {
         key: index,
-        cityName: name,
+        cityname: name,
         className: "border rounded bg-secondary text-white w-100 p-1",
         onClick: controller.handleWeatherSearchForPreviousSearch
       }, name);
@@ -28,7 +28,8 @@ function PreviousSearches(props) {
   }
 
   return /*#__PURE__*/React.createElement("ul", {
-    className: "m-0 p-0"
+    id: "previousSearches",
+    className: "m-0 pl-0 pb-1"
   }, cityNameRows);
 }
 
@@ -102,7 +103,7 @@ function ForecastItem(props) {
   if (details !== null) {
     logger.log("Rendering Forecast item Details", 3);
     return /*#__PURE__*/React.createElement("div", {
-      className: "col-lg-2 col-md-4 col-sm-1 w-100 h-50 p-1 m-1 bg-dark text-white"
+      className: "col-lg-2 col-md-4 col-sm-12 w-100 h-50 p-1 m-1 bg-dark text-white"
     }, /*#__PURE__*/React.createElement("div", {
       className: "container-fluid "
     }, /*#__PURE__*/React.createElement("div", {
@@ -156,6 +157,7 @@ function Forecast(props) {
 
     var forecastItems = forecastDetails.map(function (item, day) {
       return /*#__PURE__*/React.createElement(ForecastItem, {
+        key: day,
         day: day + 1,
         item: item
       });
@@ -222,7 +224,7 @@ var App = /*#__PURE__*/function (_React$Component) {
     }, /*#__PURE__*/React.createElement("h3", null, "Search for a City:"), /*#__PURE__*/React.createElement("input", {
       type: "text",
       className: "form-control",
-      id: "cityName",
+      id: "cityname",
       required: true
     }), /*#__PURE__*/React.createElement("div", {
       className: "invalid-feedback"
