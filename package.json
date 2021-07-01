@@ -1,8 +1,8 @@
 {
-  "name": "template-feo-react-babel",
+  "name": "week-06-homework",
   "version": "1.0.0",
-  "description": "Template for front-end with React and Babel compiler",
-  "main": "index.js",
+  "description": "Server for Accessing Open Weather API",
+  "main": "server/server.js",
   "scripts": {
     "compile": "babel frontend/src --out-dir public/js",
     "watch": "babel frontend/src --out-dir public/js --watch --verbose",
@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jsharples777/template-feo-react-babel.git"
+    "url": "git+https://github.com/jsharples777/week-06-homework.git"
   },
   "keywords": [
     "React",
@@ -38,7 +38,7 @@
   "author": "Jim Sharples",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jsharples777/template-feo-react-babel/issues"
+    "url": "https://github.com/jsharples777/week-06-homework/issues"
   },
-  "homepage": "https://github.com/jsharples777/template-feo-react-babel#readme"
+  "homepage": "https://github.com/jsharples777/week-06-homework#readme"
 }

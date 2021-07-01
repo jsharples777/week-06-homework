@@ -1,33 +1,34 @@
 import logger from './util/SimpleDebug.js';
 
 
-
 export default class Controller {
 
     constructor(applicationView, clientSideStorage) {
         this.applicationView = applicationView;
         this.clientSideStorage = clientSideStorage;
+        // setup query URLs
         this.currentQueryURL = "/current";
         this.forecastQueryURL = "/forecast";
-        // this.queryURL = "https://api.openweathermap.org/data/2.5/weather";
+        // setup local storage key and previous searches array
         this.savedSearchesKey = "savedSearchesKey";
         this.previousSearches = [];
 
 
+        // setup event handlers and local storage access call
         this.getPreviousCitySearches = this.getPreviousCitySearches.bind(this);
         this.handleWeatherSearch = this.handleWeatherSearch.bind(this);
         this.handleWeatherSearchForPreviousSearch = this.handleWeatherSearchForPreviousSearch.bind(this);
 
+        // setup Async callbacks for the fetch requests
         this.__callbackWeatherSearch = this.__callbackWeatherSearch.bind(this);
         this.__callbackForecastSearch = this.__callbackForecastSearch.bind(this);
-
-
     }
 
+    /* take Open Weather JSON and simplify for the views use */
     __convertForecastDataIntoDisplayFormat(cityName, data) {
         let viewData = [];
-        logger.log("Converting Forecast Data for display",10);
-        logger.log(data,10);
+        logger.log("Converting Forecast Data for display", 10);
+        logger.log(data, 10);
 
         let viewDataItem = {
             name: cityName,
@@ -35,19 +36,19 @@ export default class Controller {
             humidity: data.current.humidity + "%",
             wind: data.current.wind_speed + " m/s",
             uv: data.current.uvi,
-            icon: "http://openweathermap.org/img/wn/"+data.current.weather[0].icon+".png"
+            icon: "http://openweathermap.org/img/wn/" + data.current.weather[0].icon + ".png"
         }
         logger.log(viewDataItem);
         viewData.push(viewDataItem);
 
 
-        for (let index = 1;index < data.daily.length;index ++) {
+        for (let index = 1; index < data.daily.length; index++) {
             let viewDataItem = {
                 temp: data.daily[index].temp.max + " C",
                 humidity: data.daily[index].humidity + "%",
                 wind: data.daily[index].wind_speed + " m/s",
                 uv: data.daily[index].uvi,
-                icon: "http://openweathermap.org/img/wn/"+data.daily[index].weather[0].icon+".png"
+                icon: "http://openweathermap.org/img/wn/" + data.daily[index].weather[0].icon + ".png"
             }
             logger.log(viewDataItem);
             viewData.push(viewDataItem);
@@ -57,15 +58,16 @@ export default class Controller {
     }
 
 
-
-    /* private */ __callbackForecastSearch(data,status = 200) {
-        logger.log("Callback Forecast Search",7);
+    /* private */
+    __callbackForecastSearch(data, status = 200) {
+        logger.log("Callback Forecast Search", 7);
         logger.log(data, 20);
-        this.applicationView.setState({weather: this.__convertForecastDataIntoDisplayFormat(this.cityName,data)});
+        this.applicationView.setState({weather: this.__convertForecastDataIntoDisplayFormat(this.cityName, data)});
     }
 
-    /* private */ __callbackWeatherSearch(data,status = 200) {
-        logger.log("Callback Weather Search",7);
+    /* private */
+    __callbackWeatherSearch(data, status = 200) {
+        logger.log("Callback Weather Search", 7);
         if (status >= 200 && status <= 299) { // do we have any data?
 
             logger.log(data, 20);
@@ -83,23 +85,22 @@ export default class Controller {
             logger.log(`Fetching forecast for ${data.name}`, 2);
             this.cityName = data.name;
             this.__fetchQLJSON(this.forecastQueryURL, fetchParameters, this.__callbackForecastSearch);
-        }
-        else {
-            this.applicationView.setState({weather:[]});
+        } else {
+            this.applicationView.setState({weather: []});
         }
 
     }
 
-    /* private */ __fetchQLJSON(url, parameters, callback) {
-        logger.log(`Executing fetch with URL ${url} with body ${parameters}`,100);
+    /* utility function for calling JSON POST requests */
+    __fetchQLJSON(url, parameters, callback) {
+        logger.log(`Executing fetch with URL ${url} with body ${parameters}`, 100);
         try {
             JSON.stringify({parameters});
 
-        }
-        catch (error) {
-            logger.log("Unable to convert parameters to JSON",100);
-            logger.log(parameters,100);
-            callback(null,404);
+        } catch (error) {
+            logger.log("Unable to convert parameters to JSON", 100);
+            logger.log(parameters, 100);
+            callback(null, 404);
         }
         const postParameters = {
             method: "POST",
@@ -108,15 +109,13 @@ export default class Controller {
         };
 
 
-
-
         fetch(url, postParameters)
             .then((response) => {
                 logger.log("Response code was " + response.status);
                 if (response.status >= 200 && response.status <= 299) {
                     return response.json();
                 } else {
-                    callback(null,response.status);
+                    callback(null, response.status);
                     throw new Error("no results");
                 }
             })
@@ -139,14 +138,15 @@ export default class Controller {
 
         logger.log(`Fetching weather for ${cityName}`, 2);
         this.cityName = cityName;
-        this.__fetchQLJSON(this.currentQueryURL,fetchParameters,this.__callbackWeatherSearch);
+        this.__fetchQLJSON(this.currentQueryURL, fetchParameters, this.__callbackWeatherSearch);
 
     }
 
-    /* private */ __savePreviousSearches() {
+    /* private */
+    __savePreviousSearches() {
         logger.log("Saving Previous Searches", 5);
         let stringifiedSearches = JSON.stringify(this.previousSearches);
-        logger.log(stringifiedSearches,10);
+        logger.log(stringifiedSearches, 10);
         this.clientSideStorage.setItem(this.savedSearchesKey, stringifiedSearches);
     }
 
@@ -162,8 +162,7 @@ export default class Controller {
         return this.previousSearches;
     }
 
-
-
+    /* add a new City name to the local storage if not already there */
     addNewCityNameToPreviousSearches(cityName) {
         if (cityName !== null) {
             // only add the city name if not already in the list
@@ -174,10 +173,10 @@ export default class Controller {
         }
     }
 
-
+    /* weather search started */
     handleWeatherSearch(event) {
         event.preventDefault();
-        logger.log("Handling city name search for weather ",2);
+        logger.log("Handling city name search for weather ", 2);
         let cityName = document.getElementById("cityname").value.trim();
         if (cityName.length > 0) {
             logger.log("City Name is " + cityName, 2);
@@ -188,12 +187,13 @@ export default class Controller {
 
     }
 
+    /* user clicked on one of the saved searches */
     handleWeatherSearchForPreviousSearch(event) {
         event.preventDefault();
-        logger.log("Handling city name search from previous searches ",2);
+        logger.log("Handling city name search from previous searches ", 2);
         let cityName = event.target.getAttribute("cityname");
         this.__getCurrentWeatherDataForCity(cityName).then(
-            logger.log("Loading weather data async",3)
+            logger.log("Loading weather data async", 3)
         );
     }
 

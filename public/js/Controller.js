@@ -7,18 +7,23 @@ import logger from './util/SimpleDebug.js';
 var Controller = /*#__PURE__*/function () {
   function Controller(applicationView, clientSideStorage) {
     this.applicationView = applicationView;
-    this.clientSideStorage = clientSideStorage;
+    this.clientSideStorage = clientSideStorage; // setup query URLs
+
     this.currentQueryURL = "/current";
-    this.forecastQueryURL = "/forecast"; // this.queryURL = "https://api.openweathermap.org/data/2.5/weather";
+    this.forecastQueryURL = "/forecast"; // setup local storage key and previous searches array
 
     this.savedSearchesKey = "savedSearchesKey";
-    this.previousSearches = [];
+    this.previousSearches = []; // setup event handlers and local storage access call
+
     this.getPreviousCitySearches = this.getPreviousCitySearches.bind(this);
     this.handleWeatherSearch = this.handleWeatherSearch.bind(this);
-    this.handleWeatherSearchForPreviousSearch = this.handleWeatherSearchForPreviousSearch.bind(this);
+    this.handleWeatherSearchForPreviousSearch = this.handleWeatherSearchForPreviousSearch.bind(this); // setup Async callbacks for the fetch requests
+
     this.__callbackWeatherSearch = this.__callbackWeatherSearch.bind(this);
     this.__callbackForecastSearch = this.__callbackForecastSearch.bind(this);
   }
+  /* take Open Weather JSON and simplify for the views use */
+
 
   var _proto = Controller.prototype;
 
@@ -99,7 +104,7 @@ var Controller = /*#__PURE__*/function () {
       });
     }
   }
-  /* private */
+  /* utility function for calling JSON POST requests */
   ;
 
   _proto.__fetchQLJSON = function __fetchQLJSON(url, parameters, callback) {
@@ -192,7 +197,9 @@ var Controller = /*#__PURE__*/function () {
     logger.log("Saved previous searches were " + this.previousSearches, 5);
     logger.log(this.previousSearches, 10);
     return this.previousSearches;
-  };
+  }
+  /* add a new City name to the local storage if not already there */
+  ;
 
   _proto.addNewCityNameToPreviousSearches = function addNewCityNameToPreviousSearches(cityName) {
     if (cityName !== null) {
@@ -205,7 +212,9 @@ var Controller = /*#__PURE__*/function () {
         this.__savePreviousSearches();
       }
     }
-  };
+  }
+  /* weather search started */
+  ;
 
   _proto.handleWeatherSearch = function handleWeatherSearch(event) {
     event.preventDefault();
@@ -217,7 +226,9 @@ var Controller = /*#__PURE__*/function () {
 
       this.__getCurrentWeatherDataForCity(cityName).then(logger.log("Loading weather data async", 3));
     }
-  };
+  }
+  /* user clicked on one of the saved searches */
+  ;
 
   _proto.handleWeatherSearchForPreviousSearch = function handleWeatherSearchForPreviousSearch(event) {
     event.preventDefault();

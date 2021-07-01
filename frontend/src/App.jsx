@@ -11,7 +11,7 @@ function PreviousSearches(props) {
 
     let cityNameRows = "";
     if (previousCityNames != null) {
-        cityNameRows = previousCityNames.map((name,index) =>
+        cityNameRows = previousCityNames.map((name, index) =>
             <li key={index} cityname={name} className={"border rounded bg-secondary text-white w-100 p-1"}
                 onClick={controller.handleWeatherSearchForPreviousSearch}>{name}</li>
         );
@@ -91,8 +91,8 @@ function ForecastItem(props) {
 
     let details = props.item;
     let day = props.day;
-    logger.log(details,100);
-    logger.log(day,100);
+    logger.log(details, 100);
+    logger.log(day, 100);
     let date = moment().add(day, 'day').format('DD/MM/YYYY');
 
     if (details !== null) {
@@ -148,11 +148,11 @@ function Forecast(props) {
     if ((details !== null) && (details.length > 0)) {
         logger.log("Rendering Forecast Details", 1);
 
-        let forecastDetails = details.slice(1,6); // remove today from the array and only display 5 days
+        let forecastDetails = details.slice(1, 6); // remove today from the array and only display 5 days
 
 
         const forecastItems = forecastDetails.map((item, day) =>
-            <ForecastItem key={day} day={day+1} item={item}/>
+            <ForecastItem key={day} day={day + 1} item={item}/>
         );
 
         return (
@@ -201,7 +201,7 @@ class App extends React.Component {
                                         <div className={"form-group"}>
                                             <h3>Search for a City:</h3>
                                             <input type={"text"} className={"form-control"} id={"cityname"}
-                                                    required></input>
+                                                   required></input>
                                             <div className={"invalid-feedback"}>Please provide a City name</div>
                                         </div>
                                         <div className={"form-group"}>
