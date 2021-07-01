@@ -23,17 +23,30 @@ export default class Controller {
 
 
     }
-    __convertForecastDataIntoDisplayFormat(data) {
+    __convertForecastDataIntoDisplayFormat(cityName, data) {
         let viewData = [];
         logger.log("Converting Forecast Data for display",10);
-        logger.log(data);
+        logger.log(data,10);
+
+        let viewDataItem = {
+            name: cityName,
+            temp: data.current.temp + " C",
+            humidity: data.current.humidity + "%",
+            wind: data.current.wind_speed + " m/s",
+            uv: data.current.uvi,
+            icon: "http://openweathermap.org/img/wn/"+data.current.weather[0].icon+".png"
+        }
+        logger.log(viewDataItem);
+        viewData.push(viewDataItem);
+
+
         for (let index = 0;index < data.daily.length;index ++) {
             let viewDataItem = {
                 temp: data.daily[index].temp.max + " C",
                 humidity: data.daily[index].humidity + "%",
                 wind: data.daily[index].wind_speed + " m/s",
                 uv: data.daily[index].uvi,
-                icon: data.daily[index].weather[0].icon
+                icon: "http://openweathermap.org/img/wn/"+data.daily[index].weather[0].icon+".png"
             }
             logger.log(viewDataItem);
             viewData.push(viewDataItem);
@@ -41,30 +54,19 @@ export default class Controller {
         return viewData;
 
     }
-    __callbackForecastSearch(data) {
+
+
+
+    /* private */ __callbackForecastSearch(data) {
+        logger.log("Callback Forecast Search",7);
         logger.log(data, 20);
-        this.applicationView.setState({forecast: this.__convertForecastDataIntoDisplayFormat(data)});
-    }
-
-    /* take the open weather JSON reply and take out just the things we want for the view */
-    __convertWeatherDataIntoDisplayFormat(data) {
-
-        let viewData = {
-            name: data.name,
-            temp: data.main.temp + " C",
-            humidity: data.main.humidity + "%",
-            wind: data.wind.speed + "m/s"
-        }
-
-        logger.log(viewData,100);
-        return viewData;
-
+        this.applicationView.setState({forecast: this.__convertForecastDataIntoDisplayFormat(this.cityName,data)});
     }
 
     /* private */ __callbackWeatherSearch(data) {
+        logger.log("Callback Weather Search",7);
+
         logger.log(data,20);
-        logger.log(data.weather,100);
-        //this.applicationView.setState({current: this.__convertWeatherDataIntoDisplayFormat(data)});
 
         /* now make a call for the forecast */
         /* construct the request */
@@ -75,6 +77,7 @@ export default class Controller {
 
 
         logger.log(`Fetching forecast for ${data.name}`, 2);
+        this.cityName = data.name;
         this.__fetchQLJSON(this.forecastQueryURL,fetchParameters,this.__callbackForecastSearch);
 
     }
@@ -104,6 +107,7 @@ export default class Controller {
 
 
         logger.log(`Fetching weather for ${cityName}`, 2);
+        this.cityName = cityName;
         this.__fetchQLJSON(this.currentQueryURL,fetchParameters,this.__callbackWeatherSearch);
 
     }

@@ -27,6 +27,7 @@ function TodaysDetails(props) {
     if (details !== null) {
         return (
             <div className={"col-12 w-100 border border-dark rounded h-50 p-2 mb-3"}>
+
             </div>
 
         );
