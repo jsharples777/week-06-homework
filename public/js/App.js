@@ -17,8 +17,9 @@ function PreviousSearches(props) {
   var cityNameRows = "";
 
   if (previousCityNames != null) {
-    cityNameRows = previousCityNames.map(function (name) {
+    cityNameRows = previousCityNames.map(function (name, index) {
       return /*#__PURE__*/React.createElement("li", {
+        key: index,
         cityName: name,
         className: "border rounded bg-secondary text-white w-100 p-1",
         onClick: controller.handleWeatherSearchForPreviousSearch
@@ -101,7 +102,7 @@ function ForecastItem(props) {
   if (details !== null) {
     logger.log("Rendering Forecast item Details", 3);
     return /*#__PURE__*/React.createElement("div", {
-      className: "col-2 w-100 h-50 p-1 m-1 bg-dark text-white"
+      className: "col-lg-2 col-md-4 col-sm-1 w-100 h-50 p-1 m-1 bg-dark text-white"
     }, /*#__PURE__*/React.createElement("div", {
       className: "container-fluid "
     }, /*#__PURE__*/React.createElement("div", {
@@ -190,6 +191,8 @@ var App = /*#__PURE__*/function (_React$Component) {
     _this.state = {
       weather: []
     };
+    logger.setOn();
+    logger.setLevel(1000);
     return _this;
   }
 

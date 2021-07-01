@@ -11,8 +11,8 @@ function PreviousSearches(props) {
 
     let cityNameRows = "";
     if (previousCityNames != null) {
-        cityNameRows = previousCityNames.map(name =>
-            <li cityName={name} className={"border rounded bg-secondary text-white w-100 p-1"}
+        cityNameRows = previousCityNames.map((name,index) =>
+            <li key={index} cityName={name} className={"border rounded bg-secondary text-white w-100 p-1"}
                 onClick={controller.handleWeatherSearchForPreviousSearch}>{name}</li>
         );
     }
@@ -98,7 +98,7 @@ function ForecastItem(props) {
     if (details !== null) {
         logger.log("Rendering Forecast item Details", 3);
         return (
-            <div className={"col-2 w-100 h-50 p-1 m-1 bg-dark text-white"}>
+            <div className={"col-lg-2 col-md-4 col-sm-1 w-100 h-50 p-1 m-1 bg-dark text-white"}>
                 <div className={"container-fluid "}>
                     <div className={"row"}>
                         <div className={"col-12"}>
