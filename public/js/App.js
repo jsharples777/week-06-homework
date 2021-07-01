@@ -191,7 +191,7 @@ var App = /*#__PURE__*/function (_React$Component) {
     _this.state = {
       weather: []
     };
-    logger.setOn();
+    logger.setOff();
     logger.setLevel(1000);
     return _this;
   }
