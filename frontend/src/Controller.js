@@ -23,6 +23,7 @@ export default class Controller {
 
 
     }
+
     __convertForecastDataIntoDisplayFormat(cityName, data) {
         let viewData = [];
         logger.log("Converting Forecast Data for display",10);
@@ -40,7 +41,7 @@ export default class Controller {
         viewData.push(viewDataItem);
 
 
-        for (let index = 0;index < data.daily.length;index ++) {
+        for (let index = 1;index < data.daily.length;index ++) {
             let viewDataItem = {
                 temp: data.daily[index].temp.max + " C",
                 humidity: data.daily[index].humidity + "%",
@@ -57,32 +58,49 @@ export default class Controller {
 
 
 
-    /* private */ __callbackForecastSearch(data) {
+    /* private */ __callbackForecastSearch(data,status = 200) {
         logger.log("Callback Forecast Search",7);
         logger.log(data, 20);
-        this.applicationView.setState({forecast: this.__convertForecastDataIntoDisplayFormat(this.cityName,data)});
+        this.applicationView.setState({weather: this.__convertForecastDataIntoDisplayFormat(this.cityName,data)});
     }
 
-    /* private */ __callbackWeatherSearch(data) {
+    /* private */ __callbackWeatherSearch(data,status = 200) {
         logger.log("Callback Weather Search",7);
+        if (status >= 200 && status <= 299) { // do we have any data?
 
-        logger.log(data,20);
+            logger.log(data, 20);
+            /* add the city name to the list of searches */
+            this.addNewCityNameToPreviousSearches(this.cityName);
 
-        /* now make a call for the forecast */
-        /* construct the request */
-        let fetchParameters = {
-            lat: data.coord.lat,
-            lon: data.coord.lon
-        };
+            /* now make a call for the forecast */
+            /* construct the request */
+            let fetchParameters = {
+                lat: data.coord.lat,
+                lon: data.coord.lon
+            };
 
 
-        logger.log(`Fetching forecast for ${data.name}`, 2);
-        this.cityName = data.name;
-        this.__fetchQLJSON(this.forecastQueryURL,fetchParameters,this.__callbackForecastSearch);
+            logger.log(`Fetching forecast for ${data.name}`, 2);
+            this.cityName = data.name;
+            this.__fetchQLJSON(this.forecastQueryURL, fetchParameters, this.__callbackForecastSearch);
+        }
+        else {
+            this.applicationView.setState({weather:[]});
+        }
 
     }
 
     /* private */ __fetchQLJSON(url, parameters, callback) {
+        logger.log(`Executing fetch with URL ${url} with body ${parameters}`,100);
+        try {
+            JSON.stringify({parameters});
+
+        }
+        catch (error) {
+            logger.log("Unable to convert parameters to JSON",100);
+            logger.log(parameters,100);
+            callback(null,404);
+        }
         const postParameters = {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
@@ -90,10 +108,23 @@ export default class Controller {
         };
 
 
+
+
         fetch(url, postParameters)
-            .then(response => response.json())
+            .then((response) => {
+                logger.log("Response code was " + response.status);
+                if (response.status >= 200 && response.status <= 299) {
+                    return response.json();
+                } else {
+                    callback(null,response.status);
+                    throw new Error("no results");
+                }
+            })
             .then(data => {
                 callback(JSON.parse(data));
+            })
+            .catch(error => {
+
             });
 
     }
@@ -136,7 +167,7 @@ export default class Controller {
     addNewCityNameToPreviousSearches(cityName) {
         if (cityName !== null) {
             // only add the city name if not already in the list
-            if (this.previousSearches.findIndex(cityName) < 0) {
+            if (this.previousSearches.findIndex((element) => element === cityName) < 0) {
                 this.previousSearches.push(cityName);
                 this.__savePreviousSearches();
             }
@@ -147,16 +178,19 @@ export default class Controller {
     handleWeatherSearch(event) {
         event.preventDefault();
         logger.log("Handling city name search for weather ",2);
-        let cityName = document.getElementById("cityName").value;
-        logger.log("City Name is " + cityName,2);
-        this.__getCurrentWeatherDataForCity(cityName).then(
-            logger.log("Loading weather data async",3)
-        );
+        let cityName = document.getElementById("cityName").value.trim();
+        if (cityName.length > 0) {
+            logger.log("City Name is " + cityName, 2);
+            this.__getCurrentWeatherDataForCity(cityName).then(
+                logger.log("Loading weather data async", 3)
+            );
+        }
 
     }
 
     handleWeatherSearchForPreviousSearch(event) {
         event.preventDefault();
+        logger.log("Handling city name search from previous searches ",2);
         let cityName = event.target.getAttribute("cityName");
         this.__getCurrentWeatherDataForCity(cityName).then(
             logger.log("Loading weather data async",3)

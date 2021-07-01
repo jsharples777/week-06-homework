@@ -61,6 +61,7 @@ app.post("/current",(req,res) => {
         console.error('error:', error); // Print the error if one occurred
         console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         console.log('body:', body);
+        res.status(response.statusCode);
         res.json(body);
     });
 });
@@ -74,7 +75,9 @@ app.post("/forecast",(req,res) => {
         console.error('error:', error); // Print the error if one occurred
         console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         console.log('body:', body);
+        res.status(response.statusCode);
         res.json(body);
+
     });
 });
 
