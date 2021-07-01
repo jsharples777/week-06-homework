@@ -98,7 +98,7 @@ function ForecastItem(props) {
     if (details !== null) {
         logger.log("Rendering Forecast item Details", 3);
         return (
-            <div className={"col-lg-2 col-md-4 col-sm-12 w-100 h-50 p-1 m-1 bg-dark text-white"}>
+            <div className={"col-lg-2 col-md-4 col-sm-12 w-100 h-50 p-1 m-1 bg-dark text-white h-100"}>
                 <div className={"container-fluid "}>
                     <div className={"row"}>
                         <div className={"col-12"}>
