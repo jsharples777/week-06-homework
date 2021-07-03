@@ -23,6 +23,7 @@ function PreviousSearches(props) {
         </ul>
 
     );
+
 }
 
 function TodaysDetails(props) {
@@ -32,9 +33,21 @@ function TodaysDetails(props) {
     logger.log(details);
     let date = moment().format('DD/MM/YYYY');
 
+
     if ((details !== null) && (details.length > 0)) {
         logger.log("Rendering Todays Details", 1);
-        logger.log(details[0]);
+        logger.log(details[0],1);
+
+        let uvBadgeClass = "badge ";
+        if (details[0].uv < 5) {
+            uvBadgeClass += "badge-success";
+        }
+        else if ((details[0].uv >= 5) && (details[0].uv < 8)) {
+            uvBadgeClass += "badge-warning";
+        }
+        else  {
+            uvBadgeClass += "badge-danger";
+        }
         return (
             <div className={"col-12 w-100 border border-dark rounded h-50 p-2 mb-3"}>
                 <div className={"container-fluid"}>
@@ -58,7 +71,7 @@ function TodaysDetails(props) {
                                     <span>Humidity: {details[0].humidity}</span>
                                 </li>
                                 <li className={"p1"}>
-                                    <span>UV Index: {details[0].uv}</span>
+                                    <span>UV Index: <span className={uvBadgeClass}>{details[0].uv}</span></span>
                                 </li>
                             </ul>
                         </div>
@@ -87,7 +100,7 @@ function TodaysDetails(props) {
 }
 
 function ForecastItem(props) {
-    logger.log("Rendering Forecast Item Details", 3);
+    logger.log("Rendering Forecast Item Details", 51);
 
     let details = props.item;
     let day = props.day;
@@ -97,10 +110,20 @@ function ForecastItem(props) {
 
     if (details !== null) {
         logger.log("Rendering Forecast item Details", 3);
+        let uvBadgeClass = "badge ";
+        if (details.uv < 5) {
+            uvBadgeClass += "badge-success";
+        }
+        else if ((details.uv >= 5) && (details.uv < 8)) {
+            uvBadgeClass += "badge-warning";
+        }
+        else  {
+            uvBadgeClass += "badge-danger";
+        }
         return (
-            <div className={"col-lg-2 col-md-4 col-sm-12 w-100 p-1 m-1 text-white"}>
+            <div className={"col- col-lg-2 col-md-4 col-sm-12 w-100 p-1 m-1 text-white"}>
                 <div className={"container-fluid bg-dark"}>
-                    <div className={"row"}>
+                    <div className={"row align-items-center"}>
                         <div className={"col-12"}>
                             <span style={{fontSize: "14pt"}}
                                   className={"align-middle w-75"}>{"(" + date + ")"}</span><img
@@ -111,7 +134,10 @@ function ForecastItem(props) {
                         <div className={"col-12"}>
                             <ul className={"m-0 p-0 text-white"} style={{listStyleType: "none", fontSize: "12pt"}}>
                                 <li className={"p1"}>
-                                    <span>Temp: {details.temp}</span>
+                                    <span>Min Temp: {details.min_temp}</span>
+                                </li>
+                                <li className={"p1"}>
+                                    <span>Max Temp: {details.max_temp}</span>
                                 </li>
                                 <li className={"p1"}>
                                     <span>Wind: {details.wind}</span>
@@ -119,8 +145,8 @@ function ForecastItem(props) {
                                 <li className={"p1"}>
                                     <span>Humidity: {details.humidity}</span>
                                 </li>
-                                <li className={"p1"}>
-                                    <span>UV Index: {details.uv}</span>
+                                <li className={"p1 pb-2"}>
+                                    <span>UV Index: <span className={uvBadgeClass}>{details.uv}</span></span>
                                 </li>
                             </ul>
                         </div>
@@ -184,7 +210,7 @@ class App extends React.Component {
         this.controller = new Controller(this, window.localStorage);
         this.state = {weather: []};
         logger.setOff();
-        logger.setLevel(1000);
+        logger.setLevel(50);
 
     }
 

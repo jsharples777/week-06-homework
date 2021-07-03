@@ -17,7 +17,8 @@ var Controller = /*#__PURE__*/function () {
 
     this.getPreviousCitySearches = this.getPreviousCitySearches.bind(this);
     this.handleWeatherSearch = this.handleWeatherSearch.bind(this);
-    this.handleWeatherSearchForPreviousSearch = this.handleWeatherSearchForPreviousSearch.bind(this); // setup Async callbacks for the fetch requests
+    this.handleWeatherSearchForPreviousSearch = this.handleWeatherSearchForPreviousSearch.bind(this);
+    this.handleDeletePreviousSearch = this.handleDeletePreviousSearch.bind(this); // setup Async callbacks for the fetch requests
 
     this.__callbackWeatherSearch = this.__callbackWeatherSearch.bind(this);
     this.__callbackForecastSearch = this.__callbackForecastSearch.bind(this);
@@ -29,28 +30,29 @@ var Controller = /*#__PURE__*/function () {
 
   _proto.__convertForecastDataIntoDisplayFormat = function __convertForecastDataIntoDisplayFormat(cityName, data) {
     var viewData = [];
-    logger.log("Converting Forecast Data for display", 10);
-    logger.log(data, 10);
+    logger.log("Converting Forecast Data for display", 51);
+    logger.log(data, 80);
     var viewDataItem = {
       name: cityName,
-      temp: data.current.temp + " ºC",
+      temp: Math.round(data.current.temp) + " ºC",
       humidity: data.current.humidity + "%",
-      wind: data.current.wind_speed + " m/s",
-      uv: data.current.uvi,
+      wind: Math.round(data.current.wind_speed) + " m/s",
+      uv: Math.round(data.current.uvi),
       icon: "http://openweathermap.org/img/wn/" + data.current.weather[0].icon + ".png"
     };
-    logger.log(viewDataItem);
+    logger.log(viewDataItem, 80);
     viewData.push(viewDataItem);
 
     for (var index = 1; index < data.daily.length; index++) {
       var _viewDataItem = {
-        temp: data.daily[index].temp.max + " ºC",
+        min_temp: Math.round(data.daily[index].temp.min) + " ºC",
+        max_temp: Math.round(data.daily[index].temp.max) + " ºC",
         humidity: data.daily[index].humidity + "%",
-        wind: data.daily[index].wind_speed + " m/s",
-        uv: data.daily[index].uvi,
+        wind: Math.round(data.daily[index].wind_speed) + " m/s",
+        uv: Math.round(data.daily[index].uvi),
         icon: "http://openweathermap.org/img/wn/" + data.daily[index].weather[0].icon + ".png"
       };
-      logger.log(_viewDataItem);
+      logger.log(_viewDataItem, 80);
       viewData.push(_viewDataItem);
     }
 
@@ -65,7 +67,7 @@ var Controller = /*#__PURE__*/function () {
     }
 
     logger.log("Callback Forecast Search", 7);
-    logger.log(data, 20);
+    logger.log(data, 80);
     this.applicationView.setState({
       weather: this.__convertForecastDataIntoDisplayFormat(this.cityName, data)
     });
@@ -82,7 +84,7 @@ var Controller = /*#__PURE__*/function () {
 
     if (status >= 200 && status <= 299) {
       // do we have any data?
-      logger.log(data, 20);
+      logger.log(data, 70);
       /* add the city name to the list of searches */
 
       this.addNewCityNameToPreviousSearches(this.cityName);
@@ -94,7 +96,7 @@ var Controller = /*#__PURE__*/function () {
         lat: data.coord.lat,
         lon: data.coord.lon
       };
-      logger.log("Fetching forecast for " + data.name, 2);
+      logger.log("Fetching forecast for " + data.name, 10);
       this.cityName = data.name;
 
       this.__fetchQLJSON(this.forecastQueryURL, fetchParameters, this.__callbackForecastSearch);
@@ -183,6 +185,7 @@ var Controller = /*#__PURE__*/function () {
     var stringifiedSearches = JSON.stringify(this.previousSearches);
     logger.log(stringifiedSearches, 10);
     this.clientSideStorage.setItem(this.savedSearchesKey, stringifiedSearches);
+    this.getPreviousCitySearches();
   };
 
   _proto.getPreviousCitySearches = function getPreviousCitySearches() {
@@ -213,6 +216,26 @@ var Controller = /*#__PURE__*/function () {
       }
     }
   }
+  /* remove a City name to the local storage if already there */
+  ;
+
+  _proto.removeCityNameFromPreviousSearches = function removeCityNameFromPreviousSearches(cityName) {
+    if (cityName !== null) {
+      logger.log("Removing " + cityName + " from local storage", 30); // only remove the city name if already in the list
+
+      var foundIndex = this.previousSearches.findIndex(function (element) {
+        return element === cityName;
+      });
+      logger.log("Removing " + cityName + " from local storage at index " + foundIndex, 30);
+
+      if (foundIndex >= 0) {
+        this.previousSearches.splice(foundIndex, 1);
+        logger.log(this.previousSearches, 50);
+
+        this.__savePreviousSearches();
+      }
+    }
+  }
   /* weather search started */
   ;
 
@@ -236,6 +259,15 @@ var Controller = /*#__PURE__*/function () {
     var cityName = event.target.getAttribute("cityname");
 
     this.__getCurrentWeatherDataForCity(cityName).then(logger.log("Loading weather data async", 3));
+  };
+
+  _proto.handleDeletePreviousSearch = function handleDeletePreviousSearch(event) {
+    event.preventDefault();
+    var cityName = event.target.getAttribute("cityname"); // let the event propagate to let Bootstrap dismiss the alert
+
+    logger.log("Handling previous search item dismiss of city " + cityName);
+    this.cityName = "";
+    this.removeCityNameFromPreviousSearches(cityName);
   };
 
   return Controller;

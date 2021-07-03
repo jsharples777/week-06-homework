@@ -41,7 +41,17 @@ function TodaysDetails(props) {
 
   if (details !== null && details.length > 0) {
     logger.log("Rendering Todays Details", 1);
-    logger.log(details[0]);
+    logger.log(details[0], 1);
+    var uvBadgeClass = "badge ";
+
+    if (details[0].uv < 5) {
+      uvBadgeClass += "badge-success";
+    } else if (details[0].uv >= 5 && details[0].uv < 8) {
+      uvBadgeClass += "badge-warning";
+    } else {
+      uvBadgeClass += "badge-danger";
+    }
+
     return /*#__PURE__*/React.createElement("div", {
       className: "col-12 w-100 border border-dark rounded h-50 p-2 mb-3"
     }, /*#__PURE__*/React.createElement("div", {
@@ -77,7 +87,9 @@ function TodaysDetails(props) {
       className: "p1"
     }, /*#__PURE__*/React.createElement("span", null, "Humidity: ", details[0].humidity)), /*#__PURE__*/React.createElement("li", {
       className: "p1"
-    }, /*#__PURE__*/React.createElement("span", null, "UV Index: ", details[0].uv)))))));
+    }, /*#__PURE__*/React.createElement("span", null, "UV Index: ", /*#__PURE__*/React.createElement("span", {
+      className: uvBadgeClass
+    }, details[0].uv))))))));
   } else {
     return /*#__PURE__*/React.createElement("div", {
       className: "col-12 w-100 h-50"
@@ -93,7 +105,7 @@ function TodaysDetails(props) {
 }
 
 function ForecastItem(props) {
-  logger.log("Rendering Forecast Item Details", 3);
+  logger.log("Rendering Forecast Item Details", 51);
   var details = props.item;
   var day = props.day;
   logger.log(details, 100);
@@ -102,12 +114,22 @@ function ForecastItem(props) {
 
   if (details !== null) {
     logger.log("Rendering Forecast item Details", 3);
+    var uvBadgeClass = "badge ";
+
+    if (details.uv < 5) {
+      uvBadgeClass += "badge-success";
+    } else if (details.uv >= 5 && details.uv < 8) {
+      uvBadgeClass += "badge-warning";
+    } else {
+      uvBadgeClass += "badge-danger";
+    }
+
     return /*#__PURE__*/React.createElement("div", {
-      className: "col-lg-2 col-md-4 col-sm-12 w-100 p-1 m-1 text-white"
+      className: "col- col-lg-2 col-md-4 col-sm-12 w-100 p-1 m-1 text-white"
     }, /*#__PURE__*/React.createElement("div", {
       className: "container-fluid bg-dark"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "row"
+      className: "row align-items-center"
     }, /*#__PURE__*/React.createElement("div", {
       className: "col-12"
     }, /*#__PURE__*/React.createElement("span", {
@@ -131,13 +153,17 @@ function ForecastItem(props) {
       }
     }, /*#__PURE__*/React.createElement("li", {
       className: "p1"
-    }, /*#__PURE__*/React.createElement("span", null, "Temp: ", details.temp)), /*#__PURE__*/React.createElement("li", {
+    }, /*#__PURE__*/React.createElement("span", null, "Min Temp: ", details.min_temp)), /*#__PURE__*/React.createElement("li", {
+      className: "p1"
+    }, /*#__PURE__*/React.createElement("span", null, "Max Temp: ", details.max_temp)), /*#__PURE__*/React.createElement("li", {
       className: "p1"
     }, /*#__PURE__*/React.createElement("span", null, "Wind: ", details.wind)), /*#__PURE__*/React.createElement("li", {
       className: "p1"
     }, /*#__PURE__*/React.createElement("span", null, "Humidity: ", details.humidity)), /*#__PURE__*/React.createElement("li", {
-      className: "p1"
-    }, /*#__PURE__*/React.createElement("span", null, "UV Index: ", details.uv)))))));
+      className: "p1 pb-2"
+    }, /*#__PURE__*/React.createElement("span", null, "UV Index: ", /*#__PURE__*/React.createElement("span", {
+      className: uvBadgeClass
+    }, details.uv))))))));
   } else {
     return /*#__PURE__*/React.createElement("div", {
       className: "col-2 w-100 h-50"
@@ -194,7 +220,7 @@ var App = /*#__PURE__*/function (_React$Component) {
       weather: []
     };
     logger.setOff();
-    logger.setLevel(1000);
+    logger.setLevel(50);
     return _this;
   }
 
