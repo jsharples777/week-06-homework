@@ -195,7 +195,12 @@ export default class Controller {
     handleWeatherSearch(event) {
         event.preventDefault();
         logger.log("Handling city name search for weather ", 2);
-        let cityName = document.getElementById("cityname").value.trim();
+        let searchTextEl = document.getElementById("cityname");
+        let cityName = searchTextEl.value.trim();
+        setTimeout(() => {
+            searchTextEl.value = "";
+        },1000);
+        document
         if (cityName.length > 0) {
             logger.log("City Name is " + cityName, 2);
             this.__getCurrentWeatherDataForCity(cityName).then(

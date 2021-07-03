@@ -242,7 +242,12 @@ var Controller = /*#__PURE__*/function () {
   _proto.handleWeatherSearch = function handleWeatherSearch(event) {
     event.preventDefault();
     logger.log("Handling city name search for weather ", 2);
-    var cityName = document.getElementById("cityname").value.trim();
+    var searchTextEl = document.getElementById("cityname");
+    var cityName = searchTextEl.value.trim();
+    setTimeout(function () {
+      searchTextEl.value = "";
+    }, 1000);
+    document;
 
     if (cityName.length > 0) {
       logger.log("City Name is " + cityName, 2);
