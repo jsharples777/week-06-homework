@@ -19,17 +19,18 @@ function PreviousSearches(props) {
   if (previousCityNames != null) {
     cityNameRows = previousCityNames.map(function (name, index) {
       return /*#__PURE__*/React.createElement("li", {
-        key: index,
+        key: index
+      }, /*#__PURE__*/React.createElement("button", {
         cityname: name,
-        className: "border rounded bg-secondary text-white w-100 p-1",
+        className: "button is-info is-outlined mt-3",
         onClick: controller.handleWeatherSearchForPreviousSearch
-      }, name);
+      }, name));
     });
   }
 
   return /*#__PURE__*/React.createElement("ul", {
     id: "previousSearches",
-    className: "m-0 pl-0 pb-1"
+    className: "ml-0 pl-0 pb-1"
   }, cityNameRows);
 }
 
@@ -45,62 +46,49 @@ function TodaysDetails(props) {
     var uvBadgeClass = "badge ";
 
     if (details[0].uv < 5) {
-      uvBadgeClass += "badge-success";
+      uvBadgeClass += "has-background-success-dark";
     } else if (details[0].uv >= 5 && details[0].uv < 8) {
-      uvBadgeClass += "badge-warning";
+      uvBadgeClass += "has-background-warning-dark";
     } else {
-      uvBadgeClass += "badge-danger";
+      uvBadgeClass += "has-background-danger-dark";
     }
 
     return /*#__PURE__*/React.createElement("div", {
-      className: "col-12 w-100 border border-dark rounded h-50 p-2 mb-3"
+      className: "column is-full"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "container-fluid"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "row"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "col-12"
+      className: "box"
     }, /*#__PURE__*/React.createElement("span", {
       style: {
         fontSize: "18pt"
-      },
-      className: "align-middle w-75"
+      }
     }, details[0].name + " (" + date + ") "), /*#__PURE__*/React.createElement("img", {
-      className: "align-middle",
+      className: "weathericon",
       src: details[0].icon,
       alt: "Weather Icon"
-    }))), /*#__PURE__*/React.createElement("div", {
-      className: "row"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "col-12"
-    }, /*#__PURE__*/React.createElement("ul", {
-      className: "m-0 p-0 text-secondary",
+    }), /*#__PURE__*/React.createElement("ul", {
+      className: "m-0 p-0",
       style: {
         listStyleType: "none",
         fontSize: "16pt"
       }
     }, /*#__PURE__*/React.createElement("li", {
-      className: "p1"
-    }, /*#__PURE__*/React.createElement("span", null, "Temp: ", details[0].temp)), /*#__PURE__*/React.createElement("li", {
-      className: "p1"
+      className: "p-1"
+    }, /*#__PURE__*/React.createElement("span", null, "Current Temp: ", details[0].temp)), /*#__PURE__*/React.createElement("li", {
+      className: "p-1"
     }, /*#__PURE__*/React.createElement("span", null, "Wind: ", details[0].wind)), /*#__PURE__*/React.createElement("li", {
-      className: "p1"
+      className: "p-1"
     }, /*#__PURE__*/React.createElement("span", null, "Humidity: ", details[0].humidity)), /*#__PURE__*/React.createElement("li", {
-      className: "p1"
+      className: "p-1"
     }, /*#__PURE__*/React.createElement("span", null, "UV Index: ", /*#__PURE__*/React.createElement("span", {
       className: uvBadgeClass
-    }, details[0].uv))))))));
+    }, details[0].uv))))));
   } else {
     return /*#__PURE__*/React.createElement("div", {
-      className: "col-12 w-100 h-50"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "container-fluid"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "row"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "alert alert-warning fade show",
-      role: "alert"
-    }, /*#__PURE__*/React.createElement("strong", null, "No weather data loaded")))));
+      className: "column "
+    }, /*#__PURE__*/React.createElement("button", {
+      className: "button is-warning",
+      disabled: true
+    }, "No Weather Data Loaded"));
   }
 }
 
@@ -117,56 +105,34 @@ function ForecastItem(props) {
     var uvBadgeClass = "badge ";
 
     if (details.uv < 5) {
-      uvBadgeClass += "badge-success";
+      uvBadgeClass += "has-background-success-dark";
     } else if (details.uv >= 5 && details.uv < 8) {
-      uvBadgeClass += "badge-warning";
+      uvBadgeClass += "has-background-warning-dark";
     } else {
-      uvBadgeClass += "badge-danger";
+      uvBadgeClass += "has-background-danger-dark";
     }
 
     return /*#__PURE__*/React.createElement("div", {
-      className: "col- col-lg-2 col-md-4 col-sm-12 w-100 p-1 m-1 text-white"
+      className: "column rounded is-one-third-tablet is-one-fifth-desktop"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "container-fluid bg-dark"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "row align-items-center"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "col-12"
+      className: "box"
     }, /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: "14pt"
-      },
-      className: "align-middle w-75"
-    }, "(" + date + ")"), /*#__PURE__*/React.createElement("img", {
-      className: "align-middle",
+      className: "is-size-5"
+    }, date), /*#__PURE__*/React.createElement("img", {
+      className: "weathericon",
       src: details.icon,
       alt: "Weather Icon"
-    }))), /*#__PURE__*/React.createElement("div", {
-      className: "row"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "col-12"
-    }, /*#__PURE__*/React.createElement("ul", {
-      className: "m-0 p-0 text-white",
+    }), /*#__PURE__*/React.createElement("ul", {
+      className: "m-0 p-0 is-size-6",
       style: {
-        listStyleType: "none",
-        fontSize: "12pt"
+        listStyleType: "none"
       }
-    }, /*#__PURE__*/React.createElement("li", {
-      className: "p1"
-    }, /*#__PURE__*/React.createElement("span", null, "Min Temp: ", details.min_temp)), /*#__PURE__*/React.createElement("li", {
-      className: "p1"
-    }, /*#__PURE__*/React.createElement("span", null, "Max Temp: ", details.max_temp)), /*#__PURE__*/React.createElement("li", {
-      className: "p1"
-    }, /*#__PURE__*/React.createElement("span", null, "Wind: ", details.wind)), /*#__PURE__*/React.createElement("li", {
-      className: "p1"
-    }, /*#__PURE__*/React.createElement("span", null, "Humidity: ", details.humidity)), /*#__PURE__*/React.createElement("li", {
-      className: "p1 pb-2"
-    }, /*#__PURE__*/React.createElement("span", null, "UV Index: ", /*#__PURE__*/React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", null, "Min Temp: ", details.min_temp)), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", null, "Max Temp: ", details.max_temp)), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", null, "Wind: ", details.wind)), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", null, "Humidity: ", details.humidity)), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", null, "UV Index: ", /*#__PURE__*/React.createElement("span", {
       className: uvBadgeClass
-    }, details.uv))))))));
+    }, details.uv))))));
   } else {
     return /*#__PURE__*/React.createElement("div", {
-      className: "col-2 w-100 h-50"
+      className: "column"
     });
   }
 }
@@ -189,22 +155,12 @@ function Forecast(props) {
       });
     });
     return /*#__PURE__*/React.createElement("div", {
-      className: "col-12 w-100 h-50 p-2 mb-3"
+      className: "pb-5"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "container-fluid"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "row"
-    }, /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: "16pt"
-      }
-    }, "5-day Forecast:")), /*#__PURE__*/React.createElement("div", {
-      className: "row row-eq-height justify-content-between"
-    }, forecastItems)));
+      className: "columns is-justify-content-space-evenly is-multiline is-3"
+    }, forecastItems));
   } else {
-    return /*#__PURE__*/React.createElement("div", {
-      className: "col-12 w-100 h-50"
-    });
+    return /*#__PURE__*/React.createElement("div", null);
   }
 }
 
@@ -219,7 +175,7 @@ var App = /*#__PURE__*/function (_React$Component) {
     _this.state = {
       weather: []
     };
-    logger.setOff();
+    logger.setOn();
     logger.setLevel(50);
     return _this;
   }
@@ -229,62 +185,44 @@ var App = /*#__PURE__*/function (_React$Component) {
   _proto.render = function render() {
     return /*#__PURE__*/React.createElement("div", {
       id: "App",
-      className: "App container-fluid w-100"
+      className: "App columns"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "row"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "col-lg-3 col-md-4 col-sm-12"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "container-fluid w-100"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "row"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "col-12"
+      className: "column is-one-quarter ml-1"
     }, /*#__PURE__*/React.createElement("form", {
       id: "searchForm",
-      className: "was-validated",
-      noValidate: false,
       onSubmit: this.controller.handleWeatherSearch
     }, /*#__PURE__*/React.createElement("div", {
-      className: "form-group"
-    }, /*#__PURE__*/React.createElement("h3", null, "Search for a City:"), /*#__PURE__*/React.createElement("input", {
-      type: "text",
-      className: "form-control",
+      className: "field has-addons"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "control"
+    }, /*#__PURE__*/React.createElement("input", {
       id: "cityname",
+      className: "input",
+      type: "text",
+      placeholder: "City Name",
       required: true
-    }), /*#__PURE__*/React.createElement("div", {
-      className: "invalid-feedback"
-    }, "Please provide a City name")), /*#__PURE__*/React.createElement("div", {
-      className: "form-group"
-    }, /*#__PURE__*/React.createElement("button", {
-      className: "btn btn-primary w-100"
-    }, /*#__PURE__*/React.createElement("i", {
-      className: "fa fa-send-o"
-    }), "Search")))), /*#__PURE__*/React.createElement("div", {
-      className: "col-12"
-    }, /*#__PURE__*/React.createElement("hr", null)), /*#__PURE__*/React.createElement("div", {
-      className: "col-12 w-100"
-    }, /*#__PURE__*/React.createElement(PreviousSearches, {
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "control"
+    }, /*#__PURE__*/React.createElement("a", {
+      className: "button is-info",
+      onClick: this.controller.handleWeatherSearch
+    }, "Search"))), /*#__PURE__*/React.createElement("p", {
+      className: "help"
+    }, "Please enter a city name.")), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(PreviousSearches, {
       controller: this.controller
-    }))))), /*#__PURE__*/React.createElement("div", {
-      className: "col-lg-9 col-md-8 col-sm-12"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "container-fluid"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "row"
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "column is-three-quarters"
     }, /*#__PURE__*/React.createElement(TodaysDetails, {
       weather: this.state.weather
     }), /*#__PURE__*/React.createElement(Forecast, {
       weather: this.state.weather
-    }), /*#__PURE__*/React.createElement("div", {
-      className: "h-25"
-    }))))));
+    })));
   };
 
   return App;
 }(React.Component);
 
 var element = /*#__PURE__*/React.createElement(App, {
-  className: "container-fluid"
+  className: "columns"
 });
 ReactDOM.render(element, document.getElementById("root"));

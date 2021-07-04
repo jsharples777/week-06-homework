@@ -197,15 +197,20 @@ export default class Controller {
         logger.log("Handling city name search for weather ", 2);
         let searchTextEl = document.getElementById("cityname");
         let cityName = searchTextEl.value.trim();
-        setTimeout(() => {
-            searchTextEl.value = "";
-        },1000);
-        document
+
+
         if (cityName.length > 0) {
             logger.log("City Name is " + cityName, 2);
+            setTimeout(() => {
+                searchTextEl.value = "";
+            },1000);
             this.__getCurrentWeatherDataForCity(cityName).then(
                 logger.log("Loading weather data async", 3)
             );
+        }
+        else {
+            /* clear the state */
+            this.applicationView.setState({weather: []});
         }
 
     }
