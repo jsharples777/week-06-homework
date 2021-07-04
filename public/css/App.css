@@ -8,3 +8,31 @@
     display: -ms-flexbox;
     display:         flex;
 }
+
+.rounded {
+    border-radius: 10px;
+}
+
+.badge {
+    text-align: center;
+    font-size: 10pt;
+    font-style: bold;
+    color: white;
+    border-radius:7px;
+    padding-left:15px;
+    padding-right:15px;
+}
+
+.weathericon {
+    width:30px;
+    height:30px;
+}
+
+.border {
+    border-style: solid;
+    border-width: thin;
+}
+
+.border-dark {
+    border-color: black;
+}

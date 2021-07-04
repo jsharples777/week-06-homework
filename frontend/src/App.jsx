@@ -12,13 +12,14 @@ function PreviousSearches(props) {
     let cityNameRows = "";
     if (previousCityNames != null) {
         cityNameRows = previousCityNames.map((name, index) =>
-            <li key={index} cityname={name} className={"border rounded bg-secondary text-white w-100 p-1"}
-                onClick={controller.handleWeatherSearchForPreviousSearch}>{name}</li>
+            <li key={index}><button cityname={name}
+                className={"button is-info is-outlined mt-3"}
+                        onClick={controller.handleWeatherSearchForPreviousSearch}>{name}</button></li>
         );
     }
 
     return (
-        <ul id="previousSearches" className={"m-0 pl-0 pb-1"}>
+        <ul id="previousSearches" className={"ml-0 pl-0 pb-1"}>
             {cityNameRows}
         </ul>
 
@@ -36,64 +37,46 @@ function TodaysDetails(props) {
 
     if ((details !== null) && (details.length > 0)) {
         logger.log("Rendering Todays Details", 1);
-        logger.log(details[0],1);
+        logger.log(details[0], 1);
+
 
         let uvBadgeClass = "badge ";
         if (details[0].uv < 5) {
-            uvBadgeClass += "badge-success";
-        }
-        else if ((details[0].uv >= 5) && (details[0].uv < 8)) {
-            uvBadgeClass += "badge-warning";
-        }
-        else  {
-            uvBadgeClass += "badge-danger";
+            uvBadgeClass += "has-background-success-dark";
+        } else if ((details[0].uv >= 5) && (details[0].uv < 8)) {
+            uvBadgeClass += "has-background-warning-dark";
+        } else {
+            uvBadgeClass += "has-background-danger-dark";
         }
         return (
-            <div className={"col-12 w-100 border border-dark rounded h-50 p-2 mb-3"}>
-                <div className={"container-fluid"}>
-                    <div className={"row"}>
-                        <div className={"col-12"}>
-                            <span style={{fontSize: "18pt"}}
-                                  className={"align-middle w-75"}>{details[0].name + " (" + date + ") "}</span><img
-                            className={"align-middle"} src={details[0].icon} alt={"Weather Icon"}/>
-                        </div>
-                    </div>
-                    <div className={"row"}>
-                        <div className={"col-12"}>
-                            <ul className={"m-0 p-0 text-secondary"} style={{listStyleType: "none", fontSize: "16pt"}}>
-                                <li className={"p1"}>
-                                    <span>Temp: {details[0].temp}</span>
-                                </li>
-                                <li className={"p1"}>
-                                    <span>Wind: {details[0].wind}</span>
-                                </li>
-                                <li className={"p1"}>
-                                    <span>Humidity: {details[0].humidity}</span>
-                                </li>
-                                <li className={"p1"}>
-                                    <span>UV Index: <span className={uvBadgeClass}>{details[0].uv}</span></span>
-                                </li>
-                            </ul>
-                        </div>
+            <div className={"column is-full"}>
+                <div className={"box"}>
+                <span style={{fontSize: "18pt"}}>{details[0].name + " (" + date + ") "}</span><img className={"weathericon"} src={details[0].icon}
+                                                                                                   alt={"Weather Icon"}/>
+                <ul className={"m-0 p-0"} style={{listStyleType: "none", fontSize: "16pt"}}>
+                    <li className={"p-1"}>
+                        <span>Current Temp: {details[0].temp}</span>
+                    </li>
+                    <li className={"p-1"}>
+                        <span>Wind: {details[0].wind}</span>
+                    </li>
+                    <li className={"p-1"}>
+                        <span>Humidity: {details[0].humidity}</span>
+                    </li>
+                    <li className={"p-1"}>
+                        <span>UV Index: <span className={uvBadgeClass}>{details[0].uv}</span></span>
+                    </li>
+                </ul>
 
-                    </div>
                 </div>
-
             </div>
 
         );
     } else {
         return (
-            <div className={"col-12 w-100 h-50"}>
-                <div className={"container-fluid"}>
-                    <div className={"row"}>
-                        <div className="alert alert-warning fade show" role="alert">
-                            <strong>No weather data loaded</strong>
-                        </div>
-                    </div>
-                </div>
+            <div className={"column "}>
+               <button className="button is-warning" disabled={true}>No Weather Data Loaded</button>
             </div>
-
         );
     }
 
@@ -112,52 +95,40 @@ function ForecastItem(props) {
         logger.log("Rendering Forecast item Details", 3);
         let uvBadgeClass = "badge ";
         if (details.uv < 5) {
-            uvBadgeClass += "badge-success";
-        }
-        else if ((details.uv >= 5) && (details.uv < 8)) {
-            uvBadgeClass += "badge-warning";
-        }
-        else  {
-            uvBadgeClass += "badge-danger";
+            uvBadgeClass += "has-background-success-dark";
+        } else if ((details.uv >= 5) && (details.uv < 8)) {
+            uvBadgeClass += "has-background-warning-dark";
+        } else {
+            uvBadgeClass += "has-background-danger-dark";
         }
         return (
-            <div className={"col- col-lg-2 col-md-4 col-sm-12 w-100 p-1 m-1 text-white"}>
-                <div className={"container-fluid bg-dark"}>
-                    <div className={"row align-items-center"}>
-                        <div className={"col-12"}>
-                            <span style={{fontSize: "14pt"}}
-                                  className={"align-middle w-75"}>{"(" + date + ")"}</span><img
-                            className={"align-middle"} src={details.icon} alt={"Weather Icon"}/>
-                        </div>
-                    </div>
-                    <div className={"row"}>
-                        <div className={"col-12"}>
-                            <ul className={"m-0 p-0 text-white"} style={{listStyleType: "none", fontSize: "12pt"}}>
-                                <li className={"p1"}>
-                                    <span>Min Temp: {details.min_temp}</span>
-                                </li>
-                                <li className={"p1"}>
-                                    <span>Max Temp: {details.max_temp}</span>
-                                </li>
-                                <li className={"p1"}>
-                                    <span>Wind: {details.wind}</span>
-                                </li>
-                                <li className={"p1"}>
-                                    <span>Humidity: {details.humidity}</span>
-                                </li>
-                                <li className={"p1 pb-2"}>
-                                    <span>UV Index: <span className={uvBadgeClass}>{details.uv}</span></span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+            <div className={"column rounded is-one-third-tablet is-one-fifth-desktop"}>
+                <div className={"box"}>
+                <span className={"is-size-5"}>{date}</span><img className={"weathericon"} src={details.icon} alt={"Weather Icon"}/>
+                <ul className={"m-0 p-0 is-size-6"} style={{listStyleType: "none"}}>
+                    <li >
+                        <span>Min Temp: {details.min_temp}</span>
+                    </li>
+                    <li>
+                        <span>Max Temp: {details.max_temp}</span>
+                    </li>
+                    <li>
+                        <span>Wind: {details.wind}</span>
+                    </li>
+                    <li>
+                        <span>Humidity: {details.humidity}</span>
+                    </li>
+                    <li>
+                        <span>UV Index: <span className={uvBadgeClass}>{details.uv}</span></span>
+                    </li>
+                </ul>
                 </div>
             </div>
 
         );
     } else {
         return (
-            <div className={"col-2 w-100 h-50"}>
+            <div className={"column"}>
             </div>
         )
     }
@@ -182,22 +153,16 @@ function Forecast(props) {
         );
 
         return (
-            <div className={"col-12 w-100 h-50 p-2 mb-3"}>
-                <div className={"container-fluid"}>
-                    <div className={"row"}>
-                        <span style={{fontSize: "16pt"}}>5-day Forecast:</span>
-                    </div>
-                    <div className={"row row-eq-height justify-content-between"}>
-                        {forecastItems}
-                    </div>
+            <div className={"pb-5"}>
+                <div className={"columns is-justify-content-space-evenly is-multiline is-3"}>
+                    {forecastItems}
                 </div>
 
             </div>
-
         );
     } else {
         return (
-            <div className={"col-12 w-100 h-50"}>
+            <div>
             </div>
         )
     }
@@ -209,65 +174,52 @@ class App extends React.Component {
         super();
         this.controller = new Controller(this, window.localStorage);
         this.state = {weather: []};
-        logger.setOff();
+        logger.setOn();
         logger.setLevel(50);
 
     }
 
     render() {
         return (
-            <div id="App" className="App container-fluid w-100">
-                <div className={"row"}>
-                    <div className={"col-lg-3 col-md-4 col-sm-12"}>
-                        <div className={"container-fluid w-100"}>
-                            <div className="row">
-                                <div className={"col-12"}>
-                                    <form id={"searchForm"} className={"was-validated"} noValidate={false}
-                                          onSubmit={this.controller.handleWeatherSearch}>
-                                        <div className={"form-group"}>
-                                            <h3>Search for a City:</h3>
-                                            <input type={"text"} className={"form-control"} id={"cityname"}
-                                                   required></input>
-                                            <div className={"invalid-feedback"}>Please provide a City name</div>
-                                        </div>
-                                        <div className={"form-group"}>
-                                            <button className={"btn btn-primary w-100"}>
-                                                <i className={"fa fa-send-o"}></i>Search
-                                            </button>
-                                        </div>
-                                    </form>
+            <div id="App" className="App columns">
 
-                                </div>
-                                <div className={"col-12"}>
-                                    <hr></hr>
-                                </div>
-                                <div className={"col-12 w-100"}>
-                                    <PreviousSearches controller={this.controller}/>
-                                </div>
+                <div className={"column is-one-quarter ml-1"}>
+                    <form id={"searchForm"}  onSubmit={this.controller.handleWeatherSearch}>
+                        <div className="field has-addons">
+                            <div className="control">
+                                <input id="cityname" className="input" type="text" placeholder="City Name"
+                                       required></input>
                             </div>
-                        </div>
-
-                    </div>
-                    <div className={"col-lg-9 col-md-8 col-sm-12"}>
-                        <div className={"container-fluid"}>
-                            <div className={"row"}>
-
-                                <TodaysDetails weather={this.state.weather}/>
-                                <Forecast weather={this.state.weather}/>
-                                <div className={"h-25"}>
-
-                                </div>
-
+                            <div className="control">
+                                <a className="button is-info" onClick={this.controller.handleWeatherSearch}>
+                                    Search
+                                </a>
                             </div>
+
                         </div>
-                    </div>
+                        <p className="help">Please enter a city name.</p>
+                    </form>
+
+
+                    <hr></hr>
+                    <PreviousSearches controller={this.controller}/>
+                </div>
+                <div className={"column is-three-quarters"}>
+
+
+                    <TodaysDetails weather={this.state.weather}/>
+                    <Forecast weather={this.state.weather}/>
+
+
                 </div>
             </div>
+
+
         );
     }
 }
 
 
-const element = <App className={"container-fluid"}/>
+const element = <App className={"columns"}/>
 
 ReactDOM.render(element, document.getElementById("root"));

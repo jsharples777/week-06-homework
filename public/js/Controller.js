@@ -244,15 +244,19 @@ var Controller = /*#__PURE__*/function () {
     logger.log("Handling city name search for weather ", 2);
     var searchTextEl = document.getElementById("cityname");
     var cityName = searchTextEl.value.trim();
-    setTimeout(function () {
-      searchTextEl.value = "";
-    }, 1000);
-    document;
 
     if (cityName.length > 0) {
       logger.log("City Name is " + cityName, 2);
+      setTimeout(function () {
+        searchTextEl.value = "";
+      }, 1000);
 
       this.__getCurrentWeatherDataForCity(cityName).then(logger.log("Loading weather data async", 3));
+    } else {
+      /* clear the state */
+      this.applicationView.setState({
+        weather: []
+      });
     }
   }
   /* user clicked on one of the saved searches */
