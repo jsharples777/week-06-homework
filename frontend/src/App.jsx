@@ -58,6 +58,9 @@ function TodaysDetails(props) {
                         <span>Current Temp: {details[0].temp}</span>
                     </li>
                     <li className={"p-1"}>
+                        <span>Max Temp: {details[0].max_temp}</span>
+                    </li>
+                    <li className={"p-1"}>
                         <span>Wind: {details[0].wind}</span>
                     </li>
                     <li className={"p-1"}>
@@ -168,15 +171,85 @@ function Forecast(props) {
     }
 }
 
+function HourlyItem(props) {
+    logger.log("Rendering Hourly Item Details", 51);
+
+    let details = props.item;
+    let hour = props.hour;
+    logger.log(details, 100);
+    logger.log(hour, 100);
+    let time = moment().add(hour, 'hours').format('HH')+":00";
+
+    if (details !== null) {
+        logger.log("Rendering Hourly item Details", 3);
+        let uvBadgeClass = "badge ";
+        if (details.uv < 5) {
+            uvBadgeClass += "has-background-success-dark";
+        } else if ((details.uv >= 5) && (details.uv < 8)) {
+            uvBadgeClass += "has-background-warning-dark";
+        } else {
+            uvBadgeClass += "has-background-danger-dark";
+        }
+        return (
+            <div className={"column rounded is-2-tablet is-2-desktop"}>
+                <div className={"box"}>
+                    <span className={"is-size-7"}>{time}</span><img className={"weathericonsml"} src={details.icon} alt={"Weather Icon"}/>
+                    <ul className={"m-0 p-0 is-size-7"} style={{listStyleType: "none"}}>
+                        <li >
+                            <span>Temp: {details.temp}</span>
+                        </li>
+                        <li>
+                            <span>Prec: {details.precipitation}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        );
+    } else {
+        return (
+            <div className={"column"}>
+            </div>
+        )
+    }
+
+}
+
+function Hourly(props) {
+    logger.log("Rendering Hourly Details", 1);
+
+    let details = props.hourly;
+    logger.log(details);
+
+
+    if ((details !== null) && (details.length > 0)) {
+        logger.log("Rendering Hourly Details", 1);
+
+        const hourlyItems = details.map((item, hour) =>
+            <HourlyItem key={hour} hour={hour + 1} item={item}/>
+        );
+
+        return (
+            <div className={"pb-5"}>
+                <div className={"columns is-justify-content-space-evenly is-multiline"}>
+                    {hourlyItems}
+                </div>
+            </div>
+        );
+    } else {
+        return (
+            <div>
+            </div>
+        )
+    }
+}
+
 class App extends React.Component {
 
     constructor() {
         super();
         this.controller = new Controller(this, window.localStorage);
-        this.state = {weather: []};
-        logger.setOn();
-        logger.setLevel(50);
-
+        this.state = {weather: [],hourly:[]};
     }
 
     render() {
@@ -208,6 +281,7 @@ class App extends React.Component {
 
 
                     <TodaysDetails weather={this.state.weather}/>
+                    <Hourly hourly={this.state.hourly}/>
                     <Forecast weather={this.state.weather}/>
 
 
@@ -219,7 +293,8 @@ class App extends React.Component {
     }
 }
 
-
+logger.setOff();
+logger.setLevel(80);
 const element = <App className={"columns"}/>
 
 ReactDOM.render(element, document.getElementById("root"));

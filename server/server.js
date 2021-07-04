@@ -39,7 +39,7 @@ app.post("/current", (req, res) => {
 app.post("/forecast", (req, res) => {
     console.log("url: " + req.url);
     console.log("body: " + req.body);
-    let newURL = process.env.FORECAST_URL + "?lat=" + req.body.parameters.lat + "&lon=" + req.body.parameters.lon + "&appid=" + process.env.API_KEY + "&units=metric&exclude='minutely,hourly,alerts'";
+    let newURL = process.env.FORECAST_URL + "?lat=" + req.body.parameters.lat + "&lon=" + req.body.parameters.lon + "&appid=" + process.env.API_KEY + "&units=metric&exclude='minutely,alerts'";
     console.log("new URL is: " + newURL);
     request(newURL, function (error, response, body) {
         console.error('error:', error); // Print the error if one occurred

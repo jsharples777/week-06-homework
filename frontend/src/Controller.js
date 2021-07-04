@@ -34,6 +34,7 @@ export default class Controller {
         let viewDataItem = {
             name: cityName,
             temp: Math.round(data.current.temp) + " ºC",
+            max_temp: Math.round(data.daily[0].temp.max)  + " ºC",
             humidity: data.current.humidity + "%",
             wind: Math.round(data.current.wind_speed) + " m/s",
             uv: Math.round(data.current.uvi),
@@ -59,12 +60,35 @@ export default class Controller {
 
     }
 
+    /* take Open Weather JSON and simplify for the views use */
+    __convertForecastDataIntoHourlyFormat(data) {
+        let viewData = [];
+        logger.log("Converting Hourly Data for display", 51);
+        logger.log(data.hourly, 80);
+
+        for (let index = 0; index < 5; index++) {
+            let viewDataItem = {
+                temp: Math.round(data.hourly[index].temp) + " ºC",
+                precipitation: Math.round(data.hourly[index].pop) + "%",
+                humidity: data.hourly[index].humidity + "%",
+                wind: Math.round(data.hourly[index].wind_speed) + " m/s",
+                uv: Math.round(data.hourly[index].uvi),
+                icon: "http://openweathermap.org/img/wn/" + data.hourly[index].weather[0].icon + ".png"
+            }
+            logger.log(viewDataItem,80);
+            viewData.push(viewDataItem);
+        }
+        return viewData;
+
+    }
 
     /* private */
     __callbackForecastSearch(data, status = 200) {
         logger.log("Callback Forecast Search", 7);
         logger.log(data, 80);
-        this.applicationView.setState({weather: this.__convertForecastDataIntoDisplayFormat(this.cityName, data)});
+        let weatherData = this.__convertForecastDataIntoDisplayFormat(this.cityName, data);
+        let hourlyData = this.__convertForecastDataIntoHourlyFormat(data);
+        this.applicationView.setState({weather: weatherData, hourly: hourlyData});
     }
 
     /* private */
@@ -88,7 +112,7 @@ export default class Controller {
             this.cityName = data.name;
             this.__fetchQLJSON(this.forecastQueryURL, fetchParameters, this.__callbackForecastSearch);
         } else {
-            this.applicationView.setState({weather: []});
+            this.applicationView.setState({weather: [],hourly:[]});
         }
 
     }
@@ -210,7 +234,7 @@ export default class Controller {
         }
         else {
             /* clear the state */
-            this.applicationView.setState({weather: []});
+            this.applicationView.setState({weather: [],hourly:[]});
         }
 
     }

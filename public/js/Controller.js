@@ -35,6 +35,7 @@ var Controller = /*#__PURE__*/function () {
     var viewDataItem = {
       name: cityName,
       temp: Math.round(data.current.temp) + " ºC",
+      max_temp: Math.round(data.daily[0].temp.max) + " ºC",
       humidity: data.current.humidity + "%",
       wind: Math.round(data.current.wind_speed) + " m/s",
       uv: Math.round(data.current.uvi),
@@ -58,6 +59,29 @@ var Controller = /*#__PURE__*/function () {
 
     return viewData;
   }
+  /* take Open Weather JSON and simplify for the views use */
+  ;
+
+  _proto.__convertForecastDataIntoHourlyFormat = function __convertForecastDataIntoHourlyFormat(data) {
+    var viewData = [];
+    logger.log("Converting Hourly Data for display", 51);
+    logger.log(data.hourly, 80);
+
+    for (var index = 0; index < 5; index++) {
+      var viewDataItem = {
+        temp: Math.round(data.hourly[index].temp) + " ºC",
+        precipitation: Math.round(data.hourly[index].pop) + "%",
+        humidity: data.hourly[index].humidity + "%",
+        wind: Math.round(data.hourly[index].wind_speed) + " m/s",
+        uv: Math.round(data.hourly[index].uvi),
+        icon: "http://openweathermap.org/img/wn/" + data.hourly[index].weather[0].icon + ".png"
+      };
+      logger.log(viewDataItem, 80);
+      viewData.push(viewDataItem);
+    }
+
+    return viewData;
+  }
   /* private */
   ;
 
@@ -68,8 +92,14 @@ var Controller = /*#__PURE__*/function () {
 
     logger.log("Callback Forecast Search", 7);
     logger.log(data, 80);
+
+    var weatherData = this.__convertForecastDataIntoDisplayFormat(this.cityName, data);
+
+    var hourlyData = this.__convertForecastDataIntoHourlyFormat(data);
+
     this.applicationView.setState({
-      weather: this.__convertForecastDataIntoDisplayFormat(this.cityName, data)
+      weather: weatherData,
+      hourly: hourlyData
     });
   }
   /* private */
@@ -102,7 +132,8 @@ var Controller = /*#__PURE__*/function () {
       this.__fetchQLJSON(this.forecastQueryURL, fetchParameters, this.__callbackForecastSearch);
     } else {
       this.applicationView.setState({
-        weather: []
+        weather: [],
+        hourly: []
       });
     }
   }
@@ -255,7 +286,8 @@ var Controller = /*#__PURE__*/function () {
     } else {
       /* clear the state */
       this.applicationView.setState({
-        weather: []
+        weather: [],
+        hourly: []
       });
     }
   }

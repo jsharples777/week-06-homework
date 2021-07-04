@@ -75,6 +75,8 @@ function TodaysDetails(props) {
       className: "p-1"
     }, /*#__PURE__*/React.createElement("span", null, "Current Temp: ", details[0].temp)), /*#__PURE__*/React.createElement("li", {
       className: "p-1"
+    }, /*#__PURE__*/React.createElement("span", null, "Max Temp: ", details[0].max_temp)), /*#__PURE__*/React.createElement("li", {
+      className: "p-1"
     }, /*#__PURE__*/React.createElement("span", null, "Wind: ", details[0].wind)), /*#__PURE__*/React.createElement("li", {
       className: "p-1"
     }, /*#__PURE__*/React.createElement("span", null, "Humidity: ", details[0].humidity)), /*#__PURE__*/React.createElement("li", {
@@ -164,6 +166,73 @@ function Forecast(props) {
   }
 }
 
+function HourlyItem(props) {
+  logger.log("Rendering Hourly Item Details", 51);
+  var details = props.item;
+  var hour = props.hour;
+  logger.log(details, 100);
+  logger.log(hour, 100);
+  var time = moment().add(hour, 'hours').format('HH') + ":00";
+
+  if (details !== null) {
+    logger.log("Rendering Hourly item Details", 3);
+    var uvBadgeClass = "badge ";
+
+    if (details.uv < 5) {
+      uvBadgeClass += "has-background-success-dark";
+    } else if (details.uv >= 5 && details.uv < 8) {
+      uvBadgeClass += "has-background-warning-dark";
+    } else {
+      uvBadgeClass += "has-background-danger-dark";
+    }
+
+    return /*#__PURE__*/React.createElement("div", {
+      className: "column rounded is-2-tablet is-2-desktop"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "box"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "is-size-7"
+    }, time), /*#__PURE__*/React.createElement("img", {
+      className: "weathericonsml",
+      src: details.icon,
+      alt: "Weather Icon"
+    }), /*#__PURE__*/React.createElement("ul", {
+      className: "m-0 p-0 is-size-7",
+      style: {
+        listStyleType: "none"
+      }
+    }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", null, "Temp: ", details.temp)), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", null, "Prec: ", details.precipitation)))));
+  } else {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "column"
+    });
+  }
+}
+
+function Hourly(props) {
+  logger.log("Rendering Hourly Details", 1);
+  var details = props.hourly;
+  logger.log(details);
+
+  if (details !== null && details.length > 0) {
+    logger.log("Rendering Hourly Details", 1);
+    var hourlyItems = details.map(function (item, hour) {
+      return /*#__PURE__*/React.createElement(HourlyItem, {
+        key: hour,
+        hour: hour + 1,
+        item: item
+      });
+    });
+    return /*#__PURE__*/React.createElement("div", {
+      className: "pb-5"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "columns is-justify-content-space-evenly is-multiline"
+    }, hourlyItems));
+  } else {
+    return /*#__PURE__*/React.createElement("div", null);
+  }
+}
+
 var App = /*#__PURE__*/function (_React$Component) {
   _inheritsLoose(App, _React$Component);
 
@@ -173,10 +242,9 @@ var App = /*#__PURE__*/function (_React$Component) {
     _this = _React$Component.call(this) || this;
     _this.controller = new Controller(_assertThisInitialized(_this), window.localStorage);
     _this.state = {
-      weather: []
+      weather: [],
+      hourly: []
     };
-    logger.setOn();
-    logger.setLevel(50);
     return _this;
   }
 
@@ -214,6 +282,8 @@ var App = /*#__PURE__*/function (_React$Component) {
       className: "column is-three-quarters"
     }, /*#__PURE__*/React.createElement(TodaysDetails, {
       weather: this.state.weather
+    }), /*#__PURE__*/React.createElement(Hourly, {
+      hourly: this.state.hourly
     }), /*#__PURE__*/React.createElement(Forecast, {
       weather: this.state.weather
     })));
@@ -222,6 +292,8 @@ var App = /*#__PURE__*/function (_React$Component) {
   return App;
 }(React.Component);
 
+logger.setOff();
+logger.setLevel(80);
 var element = /*#__PURE__*/React.createElement(App, {
   className: "columns"
 });

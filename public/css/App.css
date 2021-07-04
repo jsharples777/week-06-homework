@@ -16,7 +16,10 @@
     width:30px;
     height:30px;
 }
-
+.weathericonsml {
+    width:15px;
+    height:15px;
+}
 .border {
     border-style: solid;
     border-width: thin;
