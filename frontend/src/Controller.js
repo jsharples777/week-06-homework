@@ -35,6 +35,7 @@ export default class Controller {
             name: cityName,
             temp: Math.round(data.current.temp) + " ºC",
             max_temp: Math.round(data.daily[0].temp.max)  + " ºC",
+            feels_like: Math.round(data.current.feels_like)  + " ºC",
             humidity: data.current.humidity + "%",
             wind: Math.round(data.current.wind_speed) + " m/s",
             uv: Math.round(data.current.uvi),

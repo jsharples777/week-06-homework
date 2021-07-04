@@ -44,7 +44,7 @@ function TodaysDetails(props) {
         if (details[0].uv < 5) {
             uvBadgeClass += "has-background-success-dark";
         } else if ((details[0].uv >= 5) && (details[0].uv < 8)) {
-            uvBadgeClass += "has-background-warning-dark";
+            uvBadgeClass += "uv-warning";
         } else {
             uvBadgeClass += "has-background-danger-dark";
         }
@@ -56,6 +56,9 @@ function TodaysDetails(props) {
                 <ul className={"m-0 p-0"} style={{listStyleType: "none", fontSize: "16pt"}}>
                     <li className={"p-1"}>
                         <span>Current Temp: {details[0].temp}</span>
+                    </li>
+                    <li className={"p-1"}>
+                        <span>Feels Like: {details[0].feels_like}</span>
                     </li>
                     <li className={"p-1"}>
                         <span>Max Temp: {details[0].max_temp}</span>
@@ -100,7 +103,7 @@ function ForecastItem(props) {
         if (details.uv < 5) {
             uvBadgeClass += "has-background-success-dark";
         } else if ((details.uv >= 5) && (details.uv < 8)) {
-            uvBadgeClass += "has-background-warning-dark";
+            uvBadgeClass += "uv-warning";
         } else {
             uvBadgeClass += "has-background-danger-dark";
         }

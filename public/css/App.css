@@ -12,14 +12,19 @@
     padding-right:15px;
 }
 
+.uv-warning {
+    background-color: goldenrod;
+}
+
 .weathericon {
-    width:30px;
-    height:30px;
+    width:32px;
+    height:32px;
 }
 .weathericonsml {
-    width:15px;
-    height:15px;
+    width:18px;
+    height:18px;
 }
+
 .border {
     border-style: solid;
     border-width: thin;

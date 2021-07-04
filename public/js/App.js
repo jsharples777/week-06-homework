@@ -48,7 +48,7 @@ function TodaysDetails(props) {
     if (details[0].uv < 5) {
       uvBadgeClass += "has-background-success-dark";
     } else if (details[0].uv >= 5 && details[0].uv < 8) {
-      uvBadgeClass += "has-background-warning-dark";
+      uvBadgeClass += "uv-warning";
     } else {
       uvBadgeClass += "has-background-danger-dark";
     }
@@ -74,6 +74,8 @@ function TodaysDetails(props) {
     }, /*#__PURE__*/React.createElement("li", {
       className: "p-1"
     }, /*#__PURE__*/React.createElement("span", null, "Current Temp: ", details[0].temp)), /*#__PURE__*/React.createElement("li", {
+      className: "p-1"
+    }, /*#__PURE__*/React.createElement("span", null, "Feels Like: ", details[0].feels_like)), /*#__PURE__*/React.createElement("li", {
       className: "p-1"
     }, /*#__PURE__*/React.createElement("span", null, "Max Temp: ", details[0].max_temp)), /*#__PURE__*/React.createElement("li", {
       className: "p-1"
@@ -109,7 +111,7 @@ function ForecastItem(props) {
     if (details.uv < 5) {
       uvBadgeClass += "has-background-success-dark";
     } else if (details.uv >= 5 && details.uv < 8) {
-      uvBadgeClass += "has-background-warning-dark";
+      uvBadgeClass += "uv-warning";
     } else {
       uvBadgeClass += "has-background-danger-dark";
     }
