@@ -197,6 +197,7 @@ export default class Controller {
             if (this.previousSearches.findIndex((element) => element === cityName) < 0) {
                 this.previousSearches.push(cityName);
                 this.__savePreviousSearches();
+                this.applicationView.setState({previousSearches:this.getPreviousCitySearches()});
             }
         }
     }
@@ -257,6 +258,7 @@ export default class Controller {
         logger.log(`Handling previous search item dismiss of city ${cityName}`);
         this.cityName = "";
         this.removeCityNameFromPreviousSearches(cityName);
+        this.applicationView.setState({previousSearches:this.getPreviousCitySearches()});
     }
 
 

@@ -245,6 +245,10 @@ var Controller = /*#__PURE__*/function () {
         this.previousSearches.push(cityName);
 
         this.__savePreviousSearches();
+
+        this.applicationView.setState({
+          previousSearches: this.getPreviousCitySearches()
+        });
       }
     }
   }
@@ -310,6 +314,9 @@ var Controller = /*#__PURE__*/function () {
     logger.log("Handling previous search item dismiss of city " + cityName);
     this.cityName = "";
     this.removeCityNameFromPreviousSearches(cityName);
+    this.applicationView.setState({
+      previousSearches: this.getPreviousCitySearches()
+    });
   };
 
   return Controller;
