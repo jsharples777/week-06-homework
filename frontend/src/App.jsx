@@ -59,7 +59,7 @@ class App extends React.Component {
     }
 }
 
-logger.setOn();
+logger.setOff();
 logger.setLevel(80);
 const element = <App className={"columns"}/>
 
